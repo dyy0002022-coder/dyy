@@ -1,0 +1,34 @@
+.film.intro-film{display:grid;grid-template-columns:minmax(240px,.78fr) minmax(0,1.65fr);gap:8%;align-items:center;padding-top:85px;padding-bottom:130px}
+.intro-film .viewing-note{font-size:14px;line-height:1.9;max-width:37em}
+.intro-film .intro-label{font-size:10px;letter-spacing:2px;color:#777b70;margin:0 0 24px}
+.intro-player{margin:0;min-width:0}
+.intro-player video{display:block;width:100%;height:auto;background:#141713;aspect-ratio:16/9;object-fit:contain}
+.intro-player figcaption{display:flex;justify-content:space-between;font-size:10px;color:#777b70;margin-top:16px;letter-spacing:.04em}
+.channel-heading{padding-top:120px;padding-bottom:55px;align-items:start}
+.channel-heading .chapter-label{display:block}
+.channel-heading .chapter-label>span{display:block;letter-spacing:2px;margin-bottom:22px}
+.channel-heading h2{font:400 clamp(30px,3.3vw,52px)/1.3 "Big Caslon","Songti SC",serif;max-width:9em}
+.channel-heading>p{max-width:42em;font-size:14px;line-height:1.95;margin:0}
+.left-stills{margin-top:0;margin-bottom:130px}
+.left-stills figure{margin:0}
+.left-stills .still-hero{margin-bottom:85px}
+.still-image{display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}
+.still-image img{display:block;width:100%;height:auto;max-height:none;filter:none}
+.left-stills figcaption{display:flex;justify-content:space-between;gap:20px;margin-top:17px;color:#74776e;font-size:10px;line-height:1.7}
+.left-stills .still-pair{display:grid;grid-template-columns:.85fr 1.35fr;gap:8%;align-items:center;margin:0 4% 85px}
+.left-stills .still-panorama{width:100%}
+.right-cinema{margin:0 0 100px;background:#090b08;color:#e9e9df;width:100%}
+.right-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.right-track::-webkit-scrollbar{display:none}
+.right-slide{flex:0 0 100%;width:100%;height:calc(100svh - 110px);min-height:440px;margin:0;scroll-snap-align:start;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center}
+.right-slide .still-image{width:100%;height:100%;background:#090b08}
+.right-slide img{width:100%;height:100%;object-fit:contain}
+.right-toolbar{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:25px 4%;font-size:10px;letter-spacing:.08em}
+.right-toolbar p{margin:0}.right-toolbar .right-caption{color:#a0a69b}
+.right-controls{display:flex;align-items:center;gap:20px;flex:none}
+.right-controls button{border:1px solid #62675d;background:transparent;color:inherit;cursor:pointer;width:42px;height:42px;font-size:17px}
+.right-controls button:disabled{opacity:.25;cursor:default}
+.right-count{min-width:44px;text-align:center}
+@media(max-width:900px){.film.intro-film{grid-template-columns:1fr;gap:35px;padding-top:55px;padding-bottom:75px}.intro-film .viewing-note{max-width:55em}.channel-heading{padding-top:70px;gap:7%}.left-stills .still-pair{margin-left:0;margin-right:0;gap:25px}.right-slide{height:72svh;min-height:360px}}
+@media(max-width:600px){.channel-heading{padding-top:65px;padding-bottom:30px}.channel-heading h2{max-width:none;font-size:32px}.channel-heading>p{margin-top:24px}.left-stills{margin-bottom:70px}.left-stills .still-hero{margin-bottom:40px}.left-stills .still-pair{grid-template-columns:1fr;gap:40px;margin-bottom:40px}.left-stills .still-pair figure:first-child{width:84%}.left-stills figcaption{font-size:9px;gap:8px}.right-slide{height:58svh;min-height:280px}.right-toolbar{padding:20px;align-items:flex-start}.right-toolbar .right-caption{max-width:17em;line-height:1.7;letter-spacing:0}.right-controls{gap:10px}.right-controls button{width:36px;height:36px}.right-cinema{margin-bottom:60px}.intro-player figcaption{font-size:9px}.intro-film .intro-label{margin-bottom:16px}}
+@media(prefers-reduced-motion:reduce){.right-track{scroll-behavior:auto}}
