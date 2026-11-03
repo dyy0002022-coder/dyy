@@ -19,5 +19,5 @@
   prev.addEventListener('click',()=>turn(-1));next.addEventListener('click',()=>turn(1));
   stage.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();if(e.key==='ArrowLeft')turn(-1);else if(e.key==='ArrowRight')turn(1);else if(book&&book.getState()==='read'){book.turnToPage(e.key==='Home'?0:sources.length-1);sync();}});
   prev.disabled=next.disabled=true;
-  Promise.all(originals.map(im=>im.decode())).then(()=>{status.hidden=true;layout();new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(layout,100);}).observe(stage);}).catch(()=>{status.textContent=document.documentElement.lang==='en'?'A page could not load. Please refresh.':'有一页未能加载，请刷新重试。';});
+  originals[0].decode().then(()=>{status.hidden=true;layout();new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(layout,100);}).observe(stage);}).catch(()=>{status.textContent=document.documentElement.lang==='en'?'A page could not load. Please refresh.':'有一页未能加载，请刷新重试。';});
 })();
