@@ -3,7 +3,7 @@
   const stage=document.querySelector('.book-stage');if(!stage)return;
   // Original attachment order, intentionally different from filename order.
   const order=[7,8,9,10,11,12,13,16,15,14,17,18,19,20,21,6];
-  const sources=order.map(n=>`assets/booklet/page-${String(n).padStart(2,'0')}.webp?v=20261102b`);
+  const sources=order.map(n=>`assets/booklet/page-${String(n).padStart(2,'0')}.webp?v=20261103c`);
   const mount=stage.querySelector('.book-mount'),status=stage.querySelector('.book-loading');
   const prev=document.querySelector('.book-prev'),next=document.querySelector('.book-next'),count=document.querySelector('.book-count'),zoom=document.querySelector('.reader-enlarge');
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
