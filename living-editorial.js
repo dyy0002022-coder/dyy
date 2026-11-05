@@ -17,6 +17,9 @@
   stage.addEventListener('pointercancel',()=>{drag=null});stage.addEventListener('click',e=>{if(moved){e.preventDefault();e.stopImmediatePropagation();moved=false}},true);
   new ResizeObserver(()=>{stage.scrollTo({top:index*stage.clientHeight,behavior:'instant'});update()}).observe(stage);update();
  });
+ const hero=document.querySelector('.hero-film'),motion=document.querySelector('.hero-motion-toggle');let motionOff=reduced.matches,heroVisible=true;
+ function syncHero(){if(motionOff||!heroVisible||document.hidden)hero.pause();else hero.play().catch(()=>{});motion.textContent=hero.paused?'▶':'Ⅱ';motion.setAttribute('aria-pressed',String(motionOff))}
+ hero.muted=true;hero.addEventListener('play',()=>{motion.textContent='Ⅱ'});hero.addEventListener('pause',()=>{motion.textContent='▶'});motion.onclick=()=>{motionOff=!motionOff;syncHero()};reduced.addEventListener('change',()=>{motionOff=reduced.matches;syncHero()});document.addEventListener('visibilitychange',syncHero);new IntersectionObserver(entries=>{heroVisible=entries[0].isIntersecting;syncHero()}).observe(hero);syncHero();
  const audio=document.querySelector('#living-ambience'),toggle=document.querySelector('.ambience-toggle');
  let eligible=false,disabled=false,fade=0,generation=0;const playing=new Set();
  const english=()=>document.documentElement.lang.startsWith('en');
@@ -25,8 +28,8 @@
  async function start(){if(!eligible||disabled||playing.size||document.hidden)return;const gen=++generation;audio.volume=0;toggle.hidden=false;try{await audio.play();if(gen!==generation)return;label();const beginning=performance.now();function step(t){if(gen!==generation)return;audio.volume=.12*Math.min(1,(t-beginning)/4500);if(t-beginning<4500)fade=requestAnimationFrame(step)}fade=requestAnimationFrame(step)}catch{label()}}
  function videoPlaying(key){playing.add(key);stop()}
  function videoEnded(key){playing.delete(key);eligible=true;toggle.hidden=false;start()}
- document.querySelectorAll('video').forEach(video=>{video.addEventListener('play',()=>videoPlaying(video));video.addEventListener('pause',()=>playing.delete(video));video.addEventListener('ended',()=>videoEnded(video))});
- toggle.addEventListener('click',()=>{if(audio.paused){disabled=false;start()}else{disabled=true;stop()}});
+ document.querySelectorAll('video:not(.hero-film)').forEach(video=>{video.addEventListener('play',()=>videoPlaying(video));video.addEventListener('pause',()=>playing.delete(video));video.addEventListener('ended',()=>videoEnded(video))});
+ toggle.addEventListener('click',()=>{if(audio.paused){eligible=true;disabled=false;start()}else{disabled=true;stop()}});
  document.addEventListener('visibilitychange',()=>document.hidden?stop():start());window.addEventListener('pagehide',stop);
  new MutationObserver(label).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
  document.querySelectorAll('[data-video]').forEach(button=>button.addEventListener('click',e=>{
