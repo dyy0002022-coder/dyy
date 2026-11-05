@@ -2,7 +2,7 @@
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 
 
- const zoom=document.querySelector(".cover-zoom-sequence");let zoomPending=false;function drawZoom(){zoomPending=false;if(!zoom)return;const box=zoom.getBoundingClientRect();const progress=Math.max(0,Math.min(1,-box.top/(zoom.offsetHeight-innerHeight)));zoom.style.setProperty("--cover-scale",reduced.matches?1:.72+.28*(progress*progress*(3-2*progress)))}function queueZoom(){if(!zoomPending){zoomPending=true;requestAnimationFrame(drawZoom)}}addEventListener("scroll",queueZoom,{passive:true});addEventListener("resize",queueZoom);reduced.addEventListener("change",queueZoom);drawZoom();
+ const zoom=document.querySelector(".cover-zoom-sequence");let zoomPending=false;function drawZoom(){zoomPending=false;if(!zoom)return;const box=zoom.getBoundingClientRect();document.body.classList.toggle("hero-in-view",box.bottom>innerHeight*.2&&(reduced.matches||box.top < -innerHeight*.65));const progress=Math.max(0,Math.min(1,-box.top/(zoom.offsetHeight-innerHeight)));zoom.style.setProperty("--cover-scale",reduced.matches?1:.72+.28*(Math.min(1,progress/.7)*Math.min(1,progress/.7)*(3-2*Math.min(1,progress/.7))))}function queueZoom(){if(!zoomPending){zoomPending=true;requestAnimationFrame(drawZoom)}}addEventListener("scroll",queueZoom,{passive:true});addEventListener("resize",queueZoom);reduced.addEventListener("change",queueZoom);drawZoom();
  document.querySelectorAll('.channel-panel').forEach(panel=>{
   const gallery=panel.querySelector('.curved-gallery'),stage=panel.querySelector('.curved-stage'),slides=[...panel.querySelectorAll('.curved-slide')];let index=0,drag=null,moved=false,raf=0;
   const prev=panel.querySelector('.channel-prev'),next=panel.querySelector('.channel-next');
