@@ -74,3 +74,9 @@ body{font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif}
 .living-editorial .intro-film .intro-player{margin-top:24px}
 .living-editorial .project .chapter h2,.living-editorial .project .reader-heading h2{font-size:20px}
 }
+/* Image-backed sections use their own high-contrast foreground. */
+.living-editorial .project .sound-with-image{--ink:#fff;color:#fff}
+.living-editorial .project .sound-with-image :is(.sound-body,.sound-statement,h2,.chapter-label>span,.sound-words,.sound-image-open){color:#fff}
+.living-editorial .sound-with-image:after{background:rgba(3,10,7,.76)}
+.living-editorial .project .sound-with-image .sound-body{background:rgba(3,10,7,.28);padding:24px;text-shadow:0 1px 2px #0006}
+@media(max-width:600px){.living-editorial .project .sound-with-image .sound-body{padding:16px;margin-left:-16px;margin-right:-16px}}
