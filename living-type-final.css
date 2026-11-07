@@ -91,3 +91,22 @@ html[lang^="zh"] .living-editorial .project .sound-words span{position:absolute;
 .living-editorial .project .curved-slide,.living-editorial .project .curved-slide .still-image,.living-editorial .project .curved-slide img{transform:none!important;clip-path:none!important;border-radius:0;box-sizing:border-box}
 .living-editorial .project .curved-slide .still-image{display:block;width:100%;height:100%;padding:0;border:0}
 .living-editorial .project .curved-slide img{display:block;width:100%;height:100%;object-fit:contain!important}
+/* Render the supplied lettering below its native size, without JPEG background haze. */
+html[lang^="zh"] .living-editorial .project .sound-words{display:flex;justify-content:space-between;align-items:center;gap:32px;aspect-ratio:auto;min-height:80px;background:none;padding:24px 0;border:0!important;mix-blend-mode:normal}
+html[lang^="zh"] .living-editorial .project .sound-words span{position:relative;width:112px;height:64px;flex:0 1 112px;clip-path:none;overflow:hidden;font-size:0;line-height:0;background-image:url("assets/living-media/sound-words-reference.jpg");background-repeat:no-repeat;background-size:774px 387px;filter:contrast(1.8);mix-blend-mode:screen}
+html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(1){background-position:-80px -150px}
+html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(2){background-position:-218px -150px}
+html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(3){background-position:-335px -150px}
+html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(4){background-position:-441px -150px}
+html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(5){background-position:-575px -150px}
+html[lang^="zh"] .living-editorial .project .sound-statement{max-width:420px;filter:contrast(1.8);border:0!important;box-shadow:none}
+.living-editorial .sound-with-image .chapter-label{border-top:0}
+@media(max-width:600px){
+html[lang^="zh"] .living-editorial .project .sound-words{gap:10px;flex-wrap:nowrap;min-height:48px;padding:16px 0}
+html[lang^="zh"] .living-editorial .project .sound-words span{width:56px;height:32px;flex-basis:56px;background-size:387px 193.5px}
+html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(1){background-position:-40px -75px}
+html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(2){background-position:-109px -75px}
+html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(3){background-position:-167.5px -75px}
+html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(4){background-position:-220.5px -75px}
+html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(5){background-position:-287.5px -75px}
+}
