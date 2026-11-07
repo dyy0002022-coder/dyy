@@ -32,3 +32,12 @@ body{font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif}
 .living-editorial .project-facts p{margin:0;font-size:13px}.living-editorial .project-facts .eyebrow{padding-top:3px}
 .living-editorial .summary{font-size:15px;line-height:1.85}
 }
+
+.living-editorial{--reading-font:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}
+.living-editorial .project .viewing-note,.living-editorial .project .summary,.living-editorial .chapter>p,.living-editorial .channel-description,.living-editorial .sound-body{font-family:var(--reading-font);font-size:16px;font-weight:400;line-height:1.9;letter-spacing:0;color:var(--ink)}
+.living-editorial .project .intro-label,.living-editorial .project>.wrap>h2,.living-editorial .chapter h2,.living-editorial .reader-heading h2{font-family:var(--reading-font);font-size:24px;font-weight:600;line-height:1.45;letter-spacing:0;color:var(--ink);text-transform:none}
+.living-editorial .project .intro-label{margin:0 0 24px}
+@media(max-width:600px){
+.living-editorial .project .viewing-note,.living-editorial .project .summary,.living-editorial .chapter>p,.living-editorial .channel-description,.living-editorial .sound-body{font-size:15px;line-height:1.85}
+.living-editorial .project .intro-label,.living-editorial .project>.wrap>h2,.living-editorial .chapter h2,.living-editorial .reader-heading h2{font-size:21px}
+}
