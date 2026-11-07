@@ -80,3 +80,8 @@ body{font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif}
 .living-editorial .sound-with-image:after{background:rgba(3,10,7,.76)}
 .living-editorial .project .sound-with-image .sound-body{background:rgba(3,10,7,.28);padding:24px;text-shadow:0 1px 2px #0006}
 @media(max-width:600px){.living-editorial .project .sound-with-image .sound-body{padding:16px;margin-left:-16px;margin-right:-16px}}
+.living-editorial .project .intro-film .intro-label{font-size:22px;line-height:1.4}
+html[lang^="zh"] .living-editorial .project .sound-statement{position:relative;width:100%;max-width:520px;aspect-ratio:2/1;font-size:0;line-height:0;background:url("assets/living-media/sound-listen-reference.jpg") center/contain no-repeat;mix-blend-mode:screen}
+html[lang^="zh"] .living-editorial .project .sound-words{position:relative;min-height:100px;aspect-ratio:1290/320;padding:0;background:url("assets/living-media/sound-words-reference.jpg") center/100% auto no-repeat;mix-blend-mode:screen;border:0}
+html[lang^="zh"] .living-editorial .project .sound-words span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:600px){.living-editorial .project .intro-film .intro-label{font-size:20px}html[lang^="zh"] .living-editorial .project .sound-words{min-height:90px}}
