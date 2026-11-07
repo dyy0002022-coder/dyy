@@ -41,3 +41,20 @@ body{font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif}
 .living-editorial .project .viewing-note,.living-editorial .project .summary,.living-editorial .chapter>p,.living-editorial .channel-description,.living-editorial .sound-body{font-size:15px;line-height:1.85}
 .living-editorial .project .intro-label,.living-editorial .project>.wrap>h2,.living-editorial .chapter h2,.living-editorial .reader-heading h2{font-size:21px}
 }
+
+/* Living: project / section / subsection / body / caption. */
+.living-editorial{--living-type:"Big Caslon","BigCaslon-Medium","Songti SC","STSong","Noto Serif CJK SC","Times New Roman",serif}
+.living-editorial .project :is(h1,h2,h3,p,.eyebrow,.channel-eyebrow,.reader-kicker,.chapter-label>span){font-family:var(--living-type)}
+.living-editorial .living-hero-copy h1{font-size:clamp(38px,5vw,72px);font-weight:500;line-height:1.12}
+.living-editorial .project .intro-label,.living-editorial .project>.wrap>h2,.living-editorial .final-film-heading h2{font:500 32px/1.3 var(--living-type);letter-spacing:0;margin-bottom:24px}
+.living-editorial .project .chapter h2,.living-editorial .project .reader-heading h2,.living-editorial .project .channel-intro h2,.living-editorial .project .context-copy h2{font:500 23px/1.45 var(--living-type);letter-spacing:0}
+.living-editorial .project .project-deck{font:500 26px/1.5 var(--living-type)}
+.living-editorial .project .summary,.living-editorial .project .viewing-note,.living-editorial .project .chapter>p,.living-editorial .project .channel-description,.living-editorial .project .sound-body{font:400 16px/1.9 var(--living-type);color:var(--ink)}
+.living-editorial .project .project-facts p,.living-editorial .project .video-hint,.living-editorial .project figcaption,.living-editorial .project .reader-heading>p{font:400 13px/1.75 var(--living-type)}
+.living-editorial .project .eyebrow,.living-editorial .project .reader-kicker,.living-editorial .project .channel-eyebrow,.living-editorial .project .chapter-label>span{font:400 11px/1.5 var(--living-type);letter-spacing:.08em}
+@media(max-width:600px){
+.living-editorial .project .intro-label,.living-editorial .project>.wrap>h2,.living-editorial .final-film-heading h2{font-size:26px}
+.living-editorial .project .chapter h2,.living-editorial .project .reader-heading h2,.living-editorial .project .channel-intro h2,.living-editorial .project .context-copy h2{font-size:20px}
+.living-editorial .project .project-deck{font-size:22px}
+.living-editorial .project .summary,.living-editorial .project .viewing-note,.living-editorial .project .chapter>p,.living-editorial .project .channel-description,.living-editorial .project .sound-body{font-size:15px}
+}
