@@ -14,3 +14,21 @@ body{font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif}
 .nav{padding:0 16px;gap:12px}.nav nav{gap:14px}.wordmark{font-size:10px;letter-spacing:.06em}
 .project-overview{display:flex;flex-direction:column;gap:28px}.project-facts{display:grid;grid-template-columns:1fr;gap:16px}
 }
+/* Project introduction: theme, supporting facts, reading text. */
+.living-editorial .project-title{padding-top:32px;padding-bottom:24px}
+.living-editorial .project-kicker{margin-top:18px;font:400 11px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#62685c}
+.living-editorial .project-deck{font:600 clamp(23px,2.2vw,32px)/1.45 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#263c30;letter-spacing:0;max-width:30em;margin-top:14px;text-wrap:balance}
+.living-editorial .project-overview{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,2fr);align-items:start;gap:64px;padding-top:24px;padding-bottom:64px}
+.living-editorial .project-facts{display:grid;grid-template-columns:1fr;gap:24px}
+.living-editorial .project-facts>div{display:block;border-top:1px solid #dce0db;padding-top:12px}
+.living-editorial .project-facts .eyebrow{font:600 10px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;letter-spacing:.12em;color:#62685c}
+.living-editorial .project-facts p{font:400 13px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;margin:8px 0 0}
+.living-editorial .summary{font:400 16px/1.9 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;margin:0;max-width:64ch}
+@media(max-width:600px){
+.living-editorial .project-title{padding-bottom:18px}.living-editorial .project-deck{font-size:23px;line-height:1.5;max-width:100%}
+.living-editorial .project-overview{display:flex;flex-direction:column;gap:28px;padding-top:12px;padding-bottom:44px}
+.living-editorial .project-facts{width:100%;gap:0}
+.living-editorial .project-facts>div{display:grid;grid-template-columns:65px minmax(0,1fr);gap:14px;padding:14px 0}
+.living-editorial .project-facts p{margin:0;font-size:13px}.living-editorial .project-facts .eyebrow{padding-top:3px}
+.living-editorial .summary{font-size:15px;line-height:1.85}
+}
