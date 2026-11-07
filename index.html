@@ -56,4 +56,4 @@ function tick(now){const dt=Math.min((now-last)/1000,.05);last=now;if(view==='wo
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(view==='detail')show(returnView);else{selected=-1;hovered=-1;focus(-1);show('works')}}if(view==='works'&&e.key==='ArrowRight')choose((selected<0?-1:selected)+1);if(view==='works'&&e.key==='ArrowLeft')choose((selected<0?0:selected)-1)});
 show(['works','overview','contact'].includes(location.hash.slice(1))?location.hash.slice(1):'works');
 })();
-</script><script defer src="watermark.js?v=20261108-soft2"></script></body></html>
+</script><script defer src="watermark.js?v=20261108-soft3"></script></body></html>

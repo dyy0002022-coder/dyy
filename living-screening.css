@@ -52,7 +52,7 @@
 .screening-enter{background:transparent;text-shadow:0 2px 10px #000;gap:12px;font-size:12px}
 .screening-play{background:#07100da8;width:54px;height:54px}
 .screening-room.is-playing .screening-screen{left:0;top:0;width:100%}
-.screening-room.is-playing .screening-video{opacity:1;pointer-events:auto}
+.living-editorial .project .final-film .screening-room.is-playing .screening-video{opacity:1;pointer-events:auto}
 .screening-room.is-playing .room-reference{transform:scale(1.12);opacity:0}
 .living-editorial .project .final-film-heading{padding:32px 24px 28px}
 .living-editorial .project .final-film-heading h2{font-size:24px}
@@ -157,3 +157,4 @@ html[lang^="zh"] .living-editorial .project .sound-words span{transform:scale(.3
 .living-editorial .ending-contact .eyebrow,.living-editorial .ending-contact .foot-bottom{font-size:11px;border:0}
 @media(max-width:700px){.living-editorial .ending-next{padding:44px 24px}.living-editorial .ending-contact{padding:40px 24px}.living-editorial .ending-contact .foot-top{grid-template-columns:1fr;gap:32px;padding-bottom:48px}.living-editorial .ending-contact .email{justify-self:start;font-size:15px}.living-editorial .ending-contact h2,.living-editorial .ending-next h2{font-size:23px}}
 @media(prefers-reduced-motion:reduce){.living-ending .ending-background{animation:none;will-change:auto}}
+.screening-status{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5;background:rgba(0,0,0,.7);color:white;border:0;padding:12px 18px;font-size:14px}.screening-status[hidden]{display:none}
