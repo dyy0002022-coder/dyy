@@ -142,3 +142,5 @@ html[lang^="zh"] .living-editorial .project .sound-words span{transform:scale(.3
 .living-editorial .project .chapter.wrap .chapter-label{display:flex;align-items:baseline;gap:12px}
 .living-editorial .project .chapter.wrap .chapter-label>span{position:static;display:inline-block;flex:0 0 auto;margin:0;line-height:1}
 .living-editorial .project .chapter.wrap .chapter-label h2{margin:0;min-width:0}
+.living-editorial .project .chapter.wrap .chapter-label>span{font-family:inherit;font-size:21px;font-weight:400;line-height:1.6}
+@media(max-width:700px){.living-editorial .project .chapter.wrap .chapter-label>span{font-size:19px}}
