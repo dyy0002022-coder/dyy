@@ -1,0 +1,93 @@
+body{font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif}
+.project .summary{font:400 17px/1.9 Arial,"PingFang SC",sans-serif;max-width:64ch}
+.project .project-deck,.living-editorial .project-deck{font:400 22px/1.6 "Times New Roman","Songti SC",serif;max-width:40em;margin-top:20px}
+.project .chapter h2,.channel-intro h2,.reader-heading h2{font-size:26px;line-height:1.35;font-weight:400}
+.project .chapter>p,.channel-description,.sound-body{font-size:15px;line-height:1.9}
+.project-facts p{font-size:13px;line-height:1.8}.eyebrow,.channel-eyebrow{font-size:10px;letter-spacing:.12em}
+.living-hero-copy h1{font-size:clamp(34px,5vw,72px)}.living-hero-copy p{font-size:clamp(15px,1.5vw,22px)}
+.sound-statement{font-size:clamp(28px,3.5vw,48px)}.next-project h2{font-size:30px}
+.project-overview{gap:7%;padding-top:40px;padding-bottom:64px}
+@media(max-width:600px){
+.project .summary{font-size:15px;line-height:1.85}.project .project-deck,.living-editorial .project-deck{font-size:19px}
+.project .chapter h2,.channel-intro h2,.reader-heading h2{font-size:22px}
+.living-hero-copy h1{font-size:36px;line-height:1.15;margin:22px 0}.living-hero-copy p{font-size:16px}
+.nav{padding:0 16px;gap:12px}.nav nav{gap:14px}.wordmark{font-size:10px;letter-spacing:.06em}
+.project-overview{display:flex;flex-direction:column;gap:28px}.project-facts{display:grid;grid-template-columns:1fr;gap:16px}
+}
+/* Project introduction: theme, supporting facts, reading text. */
+.living-editorial .project-title{padding-top:32px;padding-bottom:24px}
+.living-editorial .project-kicker{margin-top:18px;font:400 11px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#62685c}
+.living-editorial .project-deck{font:600 clamp(23px,2.2vw,32px)/1.45 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#263c30;letter-spacing:0;max-width:30em;margin-top:14px;text-wrap:balance}
+.living-editorial .project-overview{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,2fr);align-items:start;gap:64px;padding-top:24px;padding-bottom:64px}
+.living-editorial .project-facts{display:grid;grid-template-columns:1fr;gap:24px}
+.living-editorial .project-facts>div{display:block;border-top:1px solid #dce0db;padding-top:12px}
+.living-editorial .project-facts .eyebrow{font:600 10px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;letter-spacing:.12em;color:#62685c}
+.living-editorial .project-facts p{font:400 13px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;margin:8px 0 0}
+.living-editorial .summary{font:400 16px/1.9 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;margin:0;max-width:64ch}
+@media(max-width:600px){
+.living-editorial .project-title{padding-bottom:18px}.living-editorial .project-deck{font-size:23px;line-height:1.5;max-width:100%}
+.living-editorial .project-overview{display:flex;flex-direction:column;gap:28px;padding-top:12px;padding-bottom:44px}
+.living-editorial .project-facts{width:100%;gap:0}
+.living-editorial .project-facts>div{display:grid;grid-template-columns:65px minmax(0,1fr);gap:14px;padding:14px 0}
+.living-editorial .project-facts p{margin:0;font-size:13px}.living-editorial .project-facts .eyebrow{padding-top:3px}
+.living-editorial .summary{font-size:15px;line-height:1.85}
+}
+
+.living-editorial{--reading-font:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}
+.living-editorial .project .viewing-note,.living-editorial .project .summary,.living-editorial .chapter>p,.living-editorial .channel-description,.living-editorial .sound-body{font-family:var(--reading-font);font-size:16px;font-weight:400;line-height:1.9;letter-spacing:0;color:var(--ink)}
+.living-editorial .project .intro-label,.living-editorial .project>.wrap>h2,.living-editorial .chapter h2,.living-editorial .reader-heading h2{font-family:var(--reading-font);font-size:24px;font-weight:600;line-height:1.45;letter-spacing:0;color:var(--ink);text-transform:none}
+.living-editorial .project .intro-label{margin:0 0 24px}
+@media(max-width:600px){
+.living-editorial .project .viewing-note,.living-editorial .project .summary,.living-editorial .chapter>p,.living-editorial .channel-description,.living-editorial .sound-body{font-size:15px;line-height:1.85}
+.living-editorial .project .intro-label,.living-editorial .project>.wrap>h2,.living-editorial .chapter h2,.living-editorial .reader-heading h2{font-size:21px}
+}
+
+/* Living: project / section / subsection / body / caption. */
+.living-editorial{--living-type:"Big Caslon","BigCaslon-Medium","Songti SC","STSong","Noto Serif CJK SC","Times New Roman",serif}
+.living-editorial .project :is(h1,h2,h3,p,.eyebrow,.channel-eyebrow,.reader-kicker,.chapter-label>span){font-family:var(--living-type)}
+.living-editorial .living-hero-copy h1{font-size:clamp(38px,5vw,72px);font-weight:500;line-height:1.12}
+.living-editorial .project .intro-label,.living-editorial .project>.wrap>h2,.living-editorial .final-film-heading h2{font:500 32px/1.3 var(--living-type);letter-spacing:0;margin-bottom:24px}
+.living-editorial .project .chapter h2,.living-editorial .project .reader-heading h2,.living-editorial .project .channel-intro h2,.living-editorial .project .context-copy h2{font:500 23px/1.45 var(--living-type);letter-spacing:0}
+.living-editorial .project .project-deck{font:500 26px/1.5 var(--living-type)}
+.living-editorial .project .summary,.living-editorial .project .viewing-note,.living-editorial .project .chapter>p,.living-editorial .project .channel-description,.living-editorial .project .sound-body{font:400 16px/1.9 var(--living-type);color:var(--ink)}
+.living-editorial .project .project-facts p,.living-editorial .project .video-hint,.living-editorial .project figcaption,.living-editorial .project .reader-heading>p{font:400 13px/1.75 var(--living-type)}
+.living-editorial .project .eyebrow,.living-editorial .project .reader-kicker,.living-editorial .project .channel-eyebrow,.living-editorial .project .chapter-label>span{font:400 11px/1.5 var(--living-type);letter-spacing:.08em}
+@media(max-width:600px){
+.living-editorial .project .intro-label,.living-editorial .project>.wrap>h2,.living-editorial .final-film-heading h2{font-size:26px}
+.living-editorial .project .chapter h2,.living-editorial .project .reader-heading h2,.living-editorial .project .channel-intro h2,.living-editorial .project .context-copy h2{font-size:20px}
+.living-editorial .project .project-deck{font-size:22px}
+.living-editorial .project .summary,.living-editorial .project .viewing-note,.living-editorial .project .chapter>p,.living-editorial .project .channel-description,.living-editorial .project .sound-body{font-size:15px}
+}
+/* Long presentation copy must not share a vertically centred media row. */
+.living-editorial .project .intro-film{display:block;padding-top:48px;padding-bottom:64px}
+.living-editorial .intro-film>div{width:100%;max-width:none}
+.living-editorial .project .intro-film .viewing-note{max-width:48em;font-size:16px;line-height:1.85;text-wrap:pretty}
+.living-editorial .project .intro-film .intro-label{font-size:30px;line-height:1.3;margin:0 0 24px}
+.living-editorial .intro-film .intro-player{width:100%;max-width:1100px;margin:32px 0 0;align-self:start}
+.living-editorial .intro-film .intro-player video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain}
+.living-editorial .project .chapter h2,.living-editorial .project .reader-heading h2{font-size:22px}
+.living-editorial .project p{text-wrap:pretty}
+@media(max-width:600px){
+.living-editorial .project .intro-film{padding-top:32px;padding-bottom:40px}
+.living-editorial .project .intro-film .intro-label{font-size:26px;margin-bottom:20px}
+.living-editorial .project .intro-film .viewing-note{font-size:15px;line-height:1.85}
+.living-editorial .intro-film .intro-player{margin-top:24px}
+.living-editorial .project .chapter h2,.living-editorial .project .reader-heading h2{font-size:20px}
+}
+/* Image-backed sections use their own high-contrast foreground. */
+.living-editorial .project .sound-with-image{--ink:#fff;color:#fff}
+.living-editorial .project .sound-with-image :is(.sound-body,.sound-statement,h2,.chapter-label>span,.sound-words,.sound-image-open){color:#fff}
+.living-editorial .sound-with-image:after{background:rgba(3,10,7,.76)}
+.living-editorial .project .sound-with-image .sound-body{background:rgba(3,10,7,.28);padding:24px;text-shadow:0 1px 2px #0006}
+@media(max-width:600px){.living-editorial .project .sound-with-image .sound-body{padding:16px;margin-left:-16px;margin-right:-16px}}
+.living-editorial .project .intro-film .intro-label{font-size:22px;line-height:1.4}
+html[lang^="zh"] .living-editorial .project .sound-statement{position:relative;width:100%;max-width:520px;aspect-ratio:2/1;font-size:0;line-height:0;background:url("assets/living-media/sound-listen-reference.jpg") center/contain no-repeat;mix-blend-mode:screen}
+html[lang^="zh"] .living-editorial .project .sound-words{position:relative;min-height:100px;aspect-ratio:1290/320;padding:0;background:url("assets/living-media/sound-words-reference.jpg") center/100% auto no-repeat;mix-blend-mode:screen;border:0}
+html[lang^="zh"] .living-editorial .project .sound-words span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:600px){.living-editorial .project .intro-film .intro-label{font-size:20px}html[lang^="zh"] .living-editorial .project .sound-words{min-height:90px}}
+
+.living-editorial .project .sound-words{border:0!important}
+.living-editorial .project .curved-stage{perspective:none;aspect-ratio:16/9}
+.living-editorial .project .curved-slide,.living-editorial .project .curved-slide .still-image,.living-editorial .project .curved-slide img{transform:none!important;clip-path:none!important;border-radius:0;box-sizing:border-box}
+.living-editorial .project .curved-slide .still-image{display:block;width:100%;height:100%;padding:0;border:0}
+.living-editorial .project .curved-slide img{display:block;width:100%;height:100%;object-fit:contain!important}

@@ -29,6 +29,10 @@
  function videoPlaying(key){playing.add(key);stop()}
  function videoEnded(key){playing.delete(key);eligible=true;toggle.hidden=false;start()}
  document.querySelectorAll('video:not(.hero-film)').forEach(video=>{video.addEventListener('play',()=>videoPlaying(video));video.addEventListener('pause',()=>playing.delete(video));video.addEventListener('ended',()=>videoEnded(video))});
+ eligible=true;start();
+ function unlockAmbience(e){if(e.target.closest('button,video,a,input,select'))return;if(!disabled&&audio.paused)start()}
+ document.addEventListener('pointerdown',unlockAmbience,{passive:true});
+ document.addEventListener('keydown',unlockAmbience);
  toggle.addEventListener('click',()=>{if(audio.paused){eligible=true;disabled=false;start()}else{disabled=true;stop()}});
  document.addEventListener('visibilitychange',()=>document.hidden?stop():start());window.addEventListener('pagehide',stop);
  new MutationObserver(label).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
