@@ -110,3 +110,5 @@ html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(3){backg
 html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(4){background-position:-220.5px -75px}
 html[lang^="zh"] .living-editorial .project .sound-words span:nth-child(5){background-position:-287.5px -75px}
 }
+html[lang^="zh"] .living-editorial .project .sound-words span{transform:scale(.5);transform-origin:center}
+html[lang^="zh"] .living-editorial .project .sound-words{min-height:48px;padding:8px 0}
