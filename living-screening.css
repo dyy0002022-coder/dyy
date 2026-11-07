@@ -57,3 +57,30 @@
 .living-editorial .project .final-film-heading{padding:32px 24px 28px}
 .living-editorial .project .final-film-heading h2{font-size:24px}
 @media(max-width:700px){.living-editorial .project .project-overview{padding:32px 24px 48px}.overview-editorial{grid-template-columns:1fr;gap:24px}.living-editorial .project .overview-title .project-deck{font-size:22px}.living-editorial .project .overview-editorial>.project-facts{grid-template-columns:1fr;gap:18px}.living-editorial .project .overview-editorial>.project-facts>div{display:grid;grid-template-columns:64px 1fr;gap:12px}.living-editorial .project .overview-editorial>.project-facts p{margin:0}.living-editorial .project .intro-film .viewing-note{font-size:12px;line-height:1.9}.living-editorial .project .intro-film .intro-label{font-size:20px}.screening-room{aspect-ratio:16/9;min-height:0;height:auto}.screening-exit{font-size:10px;padding:5px 8px}.living-editorial .project .final-film-heading h2{font-size:20px}}
+/* Compact reading scale and shared margins for research, sound and reflection. */
+.living-editorial .project .research-heading{max-width:1160px;margin:0 auto;padding:88px 32px 36px}
+.living-editorial .project .research-heading h2{font-size:26px;line-height:1.4;margin:0 0 18px}
+.living-editorial .project .research-heading p{font-size:12px;line-height:1.9;max-width:680px;margin:0}
+.living-editorial .project .chapter.wrap{max-width:1160px;margin:auto;padding:40px 32px 56px;display:grid;grid-template-columns:1fr 1.7fr;gap:64px;align-items:start}
+.living-editorial .project .chapter .chapter-label{display:flex;align-items:baseline;gap:16px;padding:0;border:0}
+.living-editorial .project .chapter h2{font-size:21px;line-height:1.6;margin:0}
+.living-editorial .project .chapter p{font-size:14px;line-height:1.9;margin:0}
+.living-editorial .project .chapter-label>span{font-size:10px}
+.living-editorial .project .sound-reading{width:100%;max-width:620px;margin:0 auto;padding:28px 32px;background:rgba(3,10,7,.55);box-sizing:border-box;grid-column:2}
+.living-editorial .project .sound-reading p{font-size:14px;line-height:1.95;letter-spacing:.02em;color:#fff;margin:0 0 24px;text-align:left}
+.living-editorial .project .sound-reading p:last-child{font-size:12px;color:#c9d0cd;margin:0}
+.living-editorial .project .living-reflection{max-width:1160px;padding:80px 32px;margin:auto;background:#fff;color:var(--ink)}
+.living-reflection .context-copy{width:100%;max-width:none;display:grid;grid-template-columns:1fr 1.7fr;gap:64px;align-items:start}
+.living-editorial .project .living-reflection h2{font-size:24px;margin:0;line-height:1.5;color:var(--ink)}
+.living-editorial .project .living-reflection p{font-size:14px;line-height:1.95;margin:0;color:var(--ink)}
+.living-reflection .chapter-label{border:0;padding:0;margin:0}
+.reflection-image{display:block;width:100%;height:auto;margin:48px 0 0}
+.living-editorial .project .curved-stage{height:clamp(200px,24vw,500px);aspect-ratio:auto;overflow-y:auto;scrollbar-width:none;border:0;padding:0;display:block;background:#000}
+.curved-stage::-webkit-scrollbar{display:none}
+.living-editorial .project .curved-slide{height:100%;min-height:100%;margin:0!important;padding:0!important;border:0!important;display:block;box-sizing:border-box;overflow:hidden}
+.living-editorial .project .curved-slide .still-image{background:#000;border:0!important;outline:0;display:block;line-height:0;box-shadow:none;margin:0!important}
+.living-editorial .project .curved-slide img{background:#000;object-fit:contain!important;border:0;vertical-align:top}
+@media(max-width:700px){.living-editorial .project .research-heading{padding:56px 24px 24px}.living-editorial .project .research-heading h2{font-size:22px}.living-editorial .project .chapter.wrap{padding:24px 24px 40px;grid-template-columns:1fr;gap:20px}.living-editorial .project .chapter h2{font-size:19px}.living-editorial .project .chapter p,.living-editorial .project .living-reflection p{font-size:13px}.living-editorial .project .sound-reading{grid-column:auto;max-width:520px;padding:24px}.living-editorial .project .sound-reading p{font-size:13px;line-height:1.9}.living-reflection .context-copy{grid-template-columns:1fr;gap:24px}.living-editorial .project .living-reflection{padding:56px 24px}.living-editorial .project .curved-stage{height:auto;aspect-ratio:16/9}.living-editorial .project .curved-slide{height:calc((100vw - 48px)*.5625);min-height:calc((100vw - 48px)*.5625)}}
+.living-editorial .project .sound-with-image{aspect-ratio:auto;min-height:0;padding-top:72px;padding-bottom:64px;gap:36px 6%;align-content:start}
+.living-editorial .project .sound-background img{object-fit:contain;object-position:center}
+@media(max-width:700px){.living-editorial .project .sound-with-image{padding:48px 24px;min-height:0}}
