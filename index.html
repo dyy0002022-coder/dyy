@@ -25,10 +25,11 @@
 .orbit .art.enlarged .title{font-size:24px;line-height:1.2;margin-top:12px;text-align:center}
 @media(max-width:600px){.orbit .art.enlarged{width:calc(100% - 16px)}.orbit .art.enlarged img{height:calc(100svh - 390px);min-height:100px;max-height:none}.orbit .art.enlarged .title{font-size:17px}}
 </style><style id="homepage-cover-style">
-#works .home-cover{position:absolute;inset:0;display:block;overflow:hidden;background:#29231f}
+#works .home-cover{position:absolute;inset:-64px 0 0;display:block;overflow:hidden;background:#29231f}
+.topbar:has(+ main #works.active){background:rgba(32,28,25,.28);color:#fff;backdrop-filter:blur(6px)}
 #works .home-cover img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
 #works .profile,#works .orbit,#works .selection,#works .orbit-controls{display:none}
-@media(max-width:600px){#works .home-cover img{object-fit:contain;object-position:center center;background:#29231f}}
+@media(max-width:600px){#works .home-cover{inset:-58px 0 0}#works .home-cover img{object-fit:contain;object-position:center center;background:#29231f}}
 </style></head><body>
 <header class="topbar"><a class="brand" href="#works">YINGYING DONG · 董盈盈</a><nav aria-label="主导航"><button class="back">← 返回</button><button data-view="works" aria-current="true">作品</button><button data-view="overview">总述</button><button data-view="contact">联系</button></nav></header>
 <main>
