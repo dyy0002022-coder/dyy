@@ -25,18 +25,34 @@
 .orbit .art.enlarged .title{font-size:24px;line-height:1.2;margin-top:12px;text-align:center}
 @media(max-width:600px){.orbit .art.enlarged{width:calc(100% - 16px)}.orbit .art.enlarged img{height:calc(100svh - 390px);min-height:100px;max-height:none}.orbit .art.enlarged .title{font-size:17px}}
 </style><style id="homepage-cover-style">
-#works .home-cover{position:absolute;inset:-64px 0 0;height:calc(100% + 64px);display:block;overflow:hidden;background:#29231f}
-#works .home-cover img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center}
+#works .home-cover{position:absolute;inset:-64px 0 0;height:calc(100% + 64px);display:block;overflow:hidden;background:#29231f;pointer-events:none;z-index:0}
+#works .home-cover img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;object-fit:contain;object-position:center;opacity:.32;filter:brightness(.72)}
 .topbar:has(+ main #works.active){background:rgba(32,28,25,.28);color:#fff;backdrop-filter:blur(6px)}
 #works .home-copy{display:none}
-#works .profile,#works .orbit,#works .selection,#works .orbit-controls{display:none}
+#works .profile{z-index:20;color:#f7f3eb}
+#works .profile .facts{border-color:#f7f3eb66}
+#works .profile .facts li{border-color:#f7f3eb4d}
+#works .profile .facts small{color:#d3cabc}
+#works .orbit{z-index:10}
+#works .selection{z-index:30;color:#fbf8f0;border-color:#f7f3eb80}
+#works .selection button{color:#d3cabc}
+#works .orbit-controls{z-index:25;color:#eee9de}
 @media(max-width:600px){
 #works .home-cover{inset:-58px 0 0;height:calc(100% + 58px)}
-#works .home-cover img{object-position:76% center}
-#works .home-copy{position:absolute;z-index:2;left:16px;right:16px;bottom:24px;display:block;padding:22px 20px 24px;background:rgba(35,30,28,.84);color:#f7f3eb;backdrop-filter:blur(8px)}
-#works .home-copy h1{font:500 29px/1.02 "Big Caslon","Times New Roman",serif;letter-spacing:.01em;margin:0 0 16px}
-#works .home-copy p{font:13px/1.8 "PingFang SC",Arial,sans-serif;color:#eee8df;margin-top:10px}
+#works .home-cover img{object-position:center;opacity:.22}
+#works .profile{display:none}
+#works .orbit{inset:20px 0 155px;z-index:10}
+#works .selection{bottom:65px}
+#works .orbit-controls{z-index:25}
 }
+</style><style id="cursor-luminous-flow-style">
+#cursor-luminous-flow{position:fixed;z-index:80;inset:0;overflow:hidden;pointer-events:none;opacity:0;mix-blend-mode:screen;transition:opacity .35s ease}
+#cursor-luminous-flow.is-visible{opacity:1}
+#cursor-luminous-flow::before,#cursor-luminous-flow::after{content:"";position:absolute;left:var(--cursor-x,50vw);top:var(--cursor-y,50vh);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
+#cursor-luminous-flow::before{width:min(560px,68vw);height:min(560px,68vw);background:radial-gradient(circle,rgba(223,202,154,.22) 0%,rgba(183,190,159,.12) 26%,rgba(188,164,128,.07) 45%,transparent 72%);filter:blur(26px);transition:left .12s cubic-bezier(.2,.7,.2,1),top .12s cubic-bezier(.2,.7,.2,1)}
+#cursor-luminous-flow::after{width:min(300px,38vw);height:min(300px,38vw);background:radial-gradient(circle,rgba(221,227,192,.12),rgba(191,173,142,.07) 42%,transparent 72%);filter:blur(22px);transition:left .24s cubic-bezier(.16,.76,.28,1),top .24s cubic-bezier(.16,.76,.28,1)}
+@media(pointer:coarse){#cursor-luminous-flow{display:none}}
+@media(prefers-reduced-motion:reduce){#cursor-luminous-flow{display:none}#cursor-luminous-flow::before,#cursor-luminous-flow::after{transition:none}}
 </style></head><body>
 <header class="topbar"><a class="brand" href="#works">YINGYING DONG · 董盈盈</a><nav aria-label="主导航"><button class="back">← 返回</button><button data-view="works" aria-current="true">作品</button><button data-view="overview">总述</button><button data-view="contact">联系</button></nav></header>
 <main>
@@ -53,9 +69,9 @@
 </main><script>
 (()=>{'use strict';const projects=[{"title":"Living in Repetition","image":"assets/living-hands.webp","url":"living-in-repetition.html"},{"title":"Tea Fragrance in the Air","image":"assets/tea-install.webp","url":"tea-fragrance.html"},{"title":"Images in the Mirror","image":"assets/mirror.webp","url":"images-in-the-mirror.html"},{"title":"Hunger","image":"assets/hunger-install.webp","url":"hunger.html"},{"title":"Dream of Tea Plantation","image":"assets/dream.webp","url":"dream-of-tea-plantation.html"}],screens=[...document.querySelectorAll('.screen')],scene=document.querySelector('.orbit'),cards=[...scene.querySelectorAll('.art')],frame=document.querySelector('.detail-frame'),reduce=matchMedia('(prefers-reduced-motion:reduce)');let view='works',returnView='works',selected=-1,hovered=-1,angle=0,paused=false,last=0,photo=0,drag=null,skipClick=false;
 function show(id){if(!screens.some(s=>s.id===id))id='works';view=id;screens.forEach(s=>{const on=s.id===id;s.classList.toggle('active',on);s.inert=!on;s.setAttribute('aria-hidden',String(!on))});document.body.classList.toggle('detail-open',id==='detail');document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.view===id)));if(id!=='detail')frame.src='about:blank';history.replaceState(null,'','#'+id)}
-function open(url){returnView=view;document.querySelector('.loading').classList.remove('done');location.href=url;return;show('detail');document.querySelector('.back').focus()}
+function open(url){returnView=view;document.querySelector('.loading').classList.remove('done');show('detail');frame.src=url;document.querySelector('.back').focus()}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>show(b.dataset.view));document.querySelector('.brand').onclick=e=>{e.preventDefault();show('works')};document.querySelector('.back').onclick=()=>show(returnView);document.querySelector('.statement-link').onclick=e=>{e.preventDefault();open('about.html')};
-frame.onload=()=>{document.querySelector('.loading').classList.add('done');try{const doc=frame.contentDocument;doc.querySelectorAll('a[href]').forEach(a=>{if(/^index.html(?:#.*)?$/.test(a.getAttribute('href')))a.onclick=e=>{e.preventDefault();show('works')}})}catch{}};
+frame.onload=()=>{document.querySelector('.loading').classList.add('done');try{const doc=frame.contentDocument;if(doc.location.href!=='about:blank')doc.body.classList.add('embedded-project');doc.querySelectorAll('a[href]').forEach(a=>{if(/^index.html(?:#.*)?$/.test(a.getAttribute('href')))a.onclick=e=>{e.preventDefault();show('works')}})}catch{}};
 function focus(i){scene.classList.toggle('has-focus',i>=0);cards.forEach((c,n)=>{c.classList.toggle('focused',i===n);c.setAttribute('aria-pressed',String(selected===n))});if(i>=0){document.querySelector('.selection h2').textContent=projects[i].title;document.querySelector('.open-project').href=projects[i].url}layout()}
 function choose(i){selected=(i+5)%5;focus(selected)}
 cards.forEach((c,i)=>{c.onpointerenter=e=>{if(e.pointerType==='mouse'&&!drag){hovered=i;focus(i)}};c.onpointerleave=()=>{hovered=-1;focus(selected)};c.onfocus=()=>{hovered=i;focus(i)};c.onblur=()=>{hovered=-1;focus(selected)};c.onclick=()=>{if(skipClick){skipClick=false;return}choose(i)};c.ondblclick=()=>open(projects[i].url)});
@@ -67,6 +83,6 @@ window.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-dra
 window.addEventListener('pointerup',()=>{if(drag){skipClick=drag.moved;drag=null;scene.classList.remove('dragging')}});
 function tick(now){const dt=Math.min((now-last)/1000,.05);last=now;if(view==='works'&&!paused&&!reduce.matches&&selected<0&&hovered<0&&!drag&&!document.hidden){angle+=dt*.12;layout()}requestAnimationFrame(tick)}new ResizeObserver(layout).observe(scene);layout();requestAnimationFrame(tick);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(view==='detail')show(returnView);else{selected=-1;hovered=-1;focus(-1);show('works')}}if(view==='works'&&e.key==='ArrowRight')choose((selected<0?-1:selected)+1);if(view==='works'&&e.key==='ArrowLeft')choose((selected<0?0:selected)-1)});
-show(['works','overview','contact'].includes(location.hash.slice(1))?location.hash.slice(1):'works');
+const glow=document.createElement('div');glow.id='cursor-luminous-flow';glow.setAttribute('aria-hidden','true');document.body.append(glow);if(matchMedia('(pointer:fine)').matches&&!reduce.matches){let glowQueued=false,lastPointer=null;window.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;lastPointer=e;if(!glowQueued){glowQueued=true;requestAnimationFrame(()=>{glow.style.setProperty('--cursor-x',lastPointer.clientX+'px');glow.style.setProperty('--cursor-y',lastPointer.clientY+'px');glow.classList.add('is-visible');glowQueued=false})}},{passive:true});document.documentElement.addEventListener('pointerleave',()=>glow.classList.remove('is-visible'));window.addEventListener('blur',()=>glow.classList.remove('is-visible'))};show(['works','overview','contact'].includes(location.hash.slice(1))?location.hash.slice(1):'works');
 })();
 </script><script defer src="watermark.js?v=20261108-soft3"></script></body></html>
