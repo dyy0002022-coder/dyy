@@ -24,27 +24,16 @@
 .orbit .art.enlarged .number{align-self:flex-start;margin-bottom:8px}
 .orbit .art.enlarged .title{font-size:24px;line-height:1.2;margin-top:12px;text-align:center}
 @media(max-width:600px){.orbit .art.enlarged{width:calc(100% - 16px)}.orbit .art.enlarged img{height:calc(100svh - 390px);min-height:100px;max-height:none}.orbit .art.enlarged .title{font-size:17px}}
-</style><style id="homepage-cover-style">
-#works .home-cover{position:absolute;inset:-64px 0 0;height:calc(100% + 64px);display:block;overflow:hidden;background:#29231f;pointer-events:none;z-index:0}
-#works .home-cover img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;object-fit:contain;object-position:center;opacity:.32;filter:brightness(.72)}
-.topbar:has(+ main #works.active){background:rgba(32,28,25,.28);color:#fff;backdrop-filter:blur(6px)}
-#works .home-copy{display:none}
-#works .profile{z-index:20;color:#f7f3eb}
-#works .profile .facts{border-color:#f7f3eb66}
-#works .profile .facts li{border-color:#f7f3eb4d}
-#works .profile .facts small{color:#d3cabc}
-#works .orbit{z-index:10}
-#works .selection{z-index:30;color:#fbf8f0;border-color:#f7f3eb80}
-#works .selection button{color:#d3cabc}
-#works .orbit-controls{z-index:25;color:#eee9de}
-@media(max-width:600px){
-#works .home-cover{inset:-58px 0 0;height:calc(100% + 58px)}
-#works .home-cover img{object-position:center;opacity:.22}
-#works .profile{display:none}
-#works .orbit{inset:20px 0 155px;z-index:10}
-#works .selection{bottom:65px}
-#works .orbit-controls{z-index:25}
-}
+</style><style id="homepage-white-style">
+#works{background:#fff}
+.topbar:has(+ main #works.active){background:var(--paper);color:var(--ink);backdrop-filter:none}
+#works .profile{color:var(--ink)}
+#works .profile .facts{border-color:var(--line)}
+#works .profile .facts li{border-color:var(--line)}
+#works .profile .facts small{color:var(--muted)}
+#works .selection{color:var(--ink);border-color:var(--line)}
+#works .selection button{color:var(--muted)}
+#works .orbit-controls{color:var(--muted)}
 </style><style id="cursor-luminous-flow-style">
 #cursor-luminous-flow{position:fixed;z-index:80;inset:0;overflow:hidden;pointer-events:none;opacity:0;mix-blend-mode:screen;transition:opacity .35s ease}
 #cursor-luminous-flow.is-visible{opacity:1}
@@ -56,7 +45,7 @@
 </style></head><body>
 <header class="topbar"><a class="brand" href="#works">YINGYING DONG · 董盈盈</a><nav aria-label="主导航"><button class="back">← 返回</button><button data-view="works" aria-current="true">作品</button><button data-view="overview">总述</button><button data-view="contact">联系</button></nav></header>
 <main>
-<section class="screen active" id="works" aria-label="五个精选项目"><div class="home-cover" aria-label="Dream of Tea Plantation 首页主视觉"><img src="assets/homepage-cover.jpg" alt="Dream of Tea Plantation 项目封面"></div><div class="home-copy"><h1>DREAM OF TEA<br>PLANTATION</h1><p>本项目延续 Tea Fragrance in the Air 对红茶全球传播与殖民历史的研究，将茶作为物品与文化隐喻，探索不同地域如何通过历史、图像与故事建构对彼此的想象。</p><p>通过参与式故事创作与非线性叙事，邀请参与者重新诠释茶相关的文化符号，探讨全球贸易、殖民权力与地方身份之间的关系。</p></div>
+<section class="screen active" id="works" aria-label="五个精选项目">
 <div class="profile"><h1>Dong<br> Yingying</h1><p class="name-cn">董盈盈</p><p class="role">视觉与跨媒介设计师</p><ul class="facts"><li><small>PRACTICE</small><span>视觉研究 · 创意设计<br>包装设计 · 跨媒介创作</span></li><li><small>MEDIUM</small><span>平面图像 · 动态影像<br>空间装置 · 体验设计</span></li><li><small>EDUCATION</small><span>皇家艺术学院<br>信息体验设计硕士</span></li></ul></div>
 <div class="orbit" aria-label="可拖动的项目环绕展示"><button class="art" data-index="0" aria-pressed="false" aria-label="选择 Living in Repetition"><img src="assets/living-hands.webp" alt="Living in Repetition" draggable="false"><span class="title">Living in Repetition</span></button><button class="art" data-index="1" aria-pressed="false" aria-label="选择 Tea Fragrance in the Air"><img src="assets/tea-install.webp" alt="Tea Fragrance in the Air" draggable="false"><span class="title">Tea Fragrance in the Air</span></button><button class="art" data-index="2" aria-pressed="false" aria-label="选择 Images in the Mirror"><img src="assets/mirror.webp" alt="Images in the Mirror" draggable="false"><span class="title">Images in the Mirror</span></button><button class="art" data-index="3" aria-pressed="false" aria-label="选择 Hunger"><img src="assets/hunger-install.webp" alt="Hunger" draggable="false"><span class="title">Hunger</span></button><button class="art" data-index="4" aria-pressed="false" aria-label="选择 Dream of Tea Plantation"><img src="assets/dream.webp" alt="Dream of Tea Plantation" draggable="false"><span class="title">Dream of Tea Plantation</span></button></div>
 <div class="selection" aria-live="polite"><h2>Living in Repetition</h2><a class="open-project" href="living-in-repetition.html">进入项目 ↗</a><button class="reset">查看全部</button></div>
