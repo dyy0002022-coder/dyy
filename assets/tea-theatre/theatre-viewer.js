@@ -91,24 +91,3 @@ if (host) {
   }
 }
 
-const scrollGrid = document.querySelector('[data-sticky-grid]');
-if (scrollGrid && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const columns = [...scrollGrid.querySelectorAll('.sticky-grid-column')];
-  let frame = 0;
-  const updateGrid = () => {
-    frame = 0;
-    const rect = scrollGrid.getBoundingClientRect();
-    const distance = Math.max(scrollGrid.offsetHeight - window.innerHeight, 1);
-    const progress = Math.min(1, Math.max(0, -rect.top / distance));
-    columns.forEach((column) => {
-      const travel = Math.max(0, column.scrollHeight - window.innerHeight * .62);
-      const speed = Number(column.dataset.speed || 1);
-      column.style.transform = `translate3d(0, ${-progress * travel * speed}px, 0)`;
-    });
-  };
-  const requestGridUpdate = () => { if (!frame) frame = requestAnimationFrame(updateGrid); };
-  window.addEventListener('scroll', requestGridUpdate, { passive: true });
-  window.addEventListener('resize', requestGridUpdate, { passive: true });
-  window.addEventListener('load', requestGridUpdate, { once: true });
-  requestGridUpdate();
-}

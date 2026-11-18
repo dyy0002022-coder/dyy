@@ -15,16 +15,3 @@
 .theatre-split~.project-overview{padding-top:45px}
 @media(max-width:800px){.theatre-split{grid-template-columns:1fr;gap:28px;padding-top:30px;padding-bottom:40px}.theatre-copy .project-kicker{margin-top:40px}.theatre-copy h1{font-size:clamp(42px,10vw,66px)}.theatre-viewer{height:clamp(340px,100vw,540px);min-height:340px}.theatre-facts{grid-template-columns:1fr 1fr}.theatre-summary{font-size:13px}}
 @media(max-width:480px){.theatre-split{width:calc(100% - 32px)}.theatre-viewer{height:75svh;min-height:380px;max-height:560px}.viewer-controls{left:9px;right:9px;bottom:9px}.viewer-status{top:9px;left:9px}}
-.sticky-grid-scroll{height:260svh;background:#171614;color:#f7f3e9;position:relative;padding:0 clamp(20px,5vw,76px)}
-.sticky-grid-pin{height:100svh;position:sticky;top:0;overflow:hidden;display:grid;grid-template-columns:minmax(180px,.55fr) 1.45fr;gap:clamp(24px,5vw,80px);align-items:center}
-.sticky-grid-heading{position:relative;z-index:2;align-self:center;max-width:360px}
-.sticky-grid-heading>span,.sticky-grid-column figcaption{font-size:10px;letter-spacing:.16em;opacity:.68}
-.sticky-grid-heading h2{font:clamp(30px,4vw,64px)/1.12 var(--serif);margin:24px 0 16px}
-.sticky-grid-heading p{font:16px/1.8 var(--serif);opacity:.75}
-.sticky-grid{height:145%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.8vw,26px);align-items:start;overflow:visible}
-.sticky-grid-column{display:flex;flex-direction:column;gap:24px;will-change:transform}
-.sticky-grid-column:nth-child(2){padding-top:22%}.sticky-grid-column:nth-child(3){padding-top:7%}
-.sticky-grid-column figure{margin:0}.sticky-grid-column img{width:100%;height:clamp(230px,35vw,470px);object-fit:cover;filter:saturate(.78)}
-.sticky-grid-column figcaption{padding-top:9px}
-@media(max-width:760px){.sticky-grid-scroll{height:220svh;padding:0 16px}.sticky-grid-pin{grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:12px;align-content:center;padding-top:72px}.sticky-grid-heading{max-width:100%}.sticky-grid-heading h2{font-size:32px;margin:10px 0 4px}.sticky-grid-heading p{font-size:13px}.sticky-grid{height:125%;gap:9px}.sticky-grid-column{gap:14px}.sticky-grid-column img{height:clamp(180px,45vw,310px)}.sticky-grid-column:nth-child(2){padding-top:14%}.sticky-grid-column:nth-child(3){padding-top:4%}}
-@media(prefers-reduced-motion:reduce){.sticky-grid-column{transform:none!important}}
