@@ -48,7 +48,7 @@ if (host) {
     resize();
 
     let homePosition = null;
-    new GLTFLoader().load('assets/tea-theatre/theatre-box.glb', (gltf) => {
+    new GLTFLoader().load(new URL('./theatre-box.glb', import.meta.url).href, (gltf) => {
       const model = gltf.scene;
       scene.add(model);
       const bounds = new THREE.Box3().setFromObject(model);
@@ -68,9 +68,13 @@ if (host) {
       controls.update();
       fallback.hidden = true;
       status.hidden = true;
-    }, undefined, () => {
+    }, (event) => {
+      const percent = event.total ? Math.round(event.loaded / event.total * 100) : 0;
+      status.textContent = percent ? `正在加载模型 ${percent}% · Loading model ${percent}%` : '正在加载模型… · Loading model…';
+    }, (error) => {
+      console.error('Tea theatre GLB load failed', error);
       host.classList.add('viewer-failed');
-      status.textContent = '模型加载失败，请刷新页面重试。 · Model failed to load; please refresh.';
+      status.textContent = `模型加载失败：${error?.message || '请刷新页面重试'} · Model failed to load.`;
       status.classList.add('viewer-error');
     });
 
@@ -85,4 +89,26 @@ if (host) {
       renderer.render(scene, camera);
     });
   }
+}
+
+const scrollGrid = document.querySelector('[data-sticky-grid]');
+if (scrollGrid && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const columns = [...scrollGrid.querySelectorAll('.sticky-grid-column')];
+  let frame = 0;
+  const updateGrid = () => {
+    frame = 0;
+    const rect = scrollGrid.getBoundingClientRect();
+    const distance = Math.max(scrollGrid.offsetHeight - window.innerHeight, 1);
+    const progress = Math.min(1, Math.max(0, -rect.top / distance));
+    columns.forEach((column) => {
+      const travel = Math.max(0, column.scrollHeight - window.innerHeight * .62);
+      const speed = Number(column.dataset.speed || 1);
+      column.style.transform = `translate3d(0, ${-progress * travel * speed}px, 0)`;
+    });
+  };
+  const requestGridUpdate = () => { if (!frame) frame = requestAnimationFrame(updateGrid); };
+  window.addEventListener('scroll', requestGridUpdate, { passive: true });
+  window.addEventListener('resize', requestGridUpdate, { passive: true });
+  window.addEventListener('load', requestGridUpdate, { once: true });
+  requestGridUpdate();
 }
