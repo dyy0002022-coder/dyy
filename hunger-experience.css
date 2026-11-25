@@ -1,0 +1,13 @@
+.hunger-world{position:relative;width:100%;height:min(84svh,880px);min-height:640px;margin:clamp(64px,8vw,112px) 0;background:#f7f7f4;color:#181817;overflow:hidden;isolation:isolate}
+.hunger-world[hidden]{display:none}
+.hunger-world__canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.hunger-world__header{position:absolute;z-index:2;top:clamp(26px,5vw,64px);left:max(24px,calc((100% - 1120px)/2));pointer-events:none}
+.hunger-world__header p{margin:0 0 14px;font:500 10px/1.5 var(--font-sans,Arial,sans-serif);letter-spacing:.2em;text-transform:uppercase;opacity:.65}
+.hunger-world__header img{display:block;width:clamp(180px,24vw,320px);height:auto}
+.hunger-world__header h2{margin:12px 0 0;font:400 13px/1.5 var(--sans);letter-spacing:.02em;opacity:.82}
+.hunger-world__hint{position:absolute;z-index:2;right:max(24px,calc((100% - 1120px)/2));bottom:32px;margin:0;font:12px/1.6 var(--font-sans,Arial,sans-serif);opacity:.72;text-align:right;pointer-events:none}
+.hunger-world__status{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);font:12px/1.5 var(--font-sans,Arial,sans-serif);letter-spacing:.04em;color:#181817}
+.hunger-world__status[hidden]{display:none}
+.hunger-world__back{display:none}
+.hunger-video-source{position:fixed;width:1px;height:1px;left:-10px;top:-10px;opacity:0;pointer-events:none}
+@media(max-width:650px){.hunger-world{height:74svh;min-height:560px;margin:64px 0}.hunger-world__hint{right:20px;bottom:20px;max-width:175px}.hunger-world__header{left:20px;top:26px}}
