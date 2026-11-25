@@ -11,3 +11,21 @@
 .hunger-world__back{display:none}
 .hunger-video-source{position:fixed;width:1px;height:1px;left:-10px;top:-10px;opacity:0;pointer-events:none}
 @media(max-width:650px){.hunger-world{height:74svh;min-height:560px;margin:64px 0}.hunger-world__hint{right:20px;bottom:20px;max-width:175px}.hunger-world__header{left:20px;top:26px}}
+
+.hunger-gallery{width:100%;margin:clamp(36px,6vw,88px) 0 clamp(52px,8vw,112px);background:#fff}
+.hunger-gallery__track{display:flex;align-items:center;gap:clamp(14px,2vw,30px);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:clamp(18px,5vw,84px);padding:0 clamp(18px,5vw,84px) 12px;scrollbar-width:none;cursor:grab;user-select:none;-webkit-overflow-scrolling:touch}
+.hunger-gallery__track::-webkit-scrollbar{display:none}
+.hunger-gallery__track.is-dragging{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto}
+.hunger-gallery__item{flex:0 0 auto;width:clamp(300px,52vw,920px);margin:0;scroll-snap-align:start;line-height:0}
+.hunger-gallery__item--wide{width:clamp(340px,65vw,1120px)}
+.hunger-gallery__item img{display:block;width:100%;height:auto;max-height:min(62vh,680px);object-fit:contain;pointer-events:none;-webkit-user-drag:none}
+.hunger-gallery__bar{display:flex;align-items:center;gap:clamp(12px,2vw,28px);max-width:1440px;margin:18px auto 0;padding:0 clamp(18px,5vw,84px);font:500 10px/1.4 var(--font-sans,Arial,sans-serif);letter-spacing:.12em;color:#77736f}
+.hunger-gallery__note{white-space:nowrap}
+.hunger-gallery__counter{font-variant-numeric:tabular-nums;white-space:nowrap}
+.hunger-gallery__progress{position:relative;flex:1;height:1px;background:#e4e1dd;overflow:hidden}
+.hunger-gallery__progress span{display:block;width:100%;height:100%;background:#242220;transform:scaleX(0);transform-origin:left center;transition:transform .16s linear}
+.hunger-gallery__arrows{display:flex;gap:8px}
+.hunger-gallery__arrows button{display:grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid #d8d5d1;border-radius:50%;background:#fff;color:#242220;font:16px/1 var(--font-sans,Arial,sans-serif);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.hunger-gallery__arrows button:hover{background:#242220;color:#fff;border-color:#242220}
+@media(max-width:650px){.hunger-gallery{margin:44px 0 64px}.hunger-gallery__track{gap:12px;padding-inline:18px}.hunger-gallery__item{width:76vw}.hunger-gallery__item--wide{width:86vw}.hunger-gallery__item img{max-height:58vh}.hunger-gallery__bar{gap:10px;margin-top:12px;padding-inline:18px}.hunger-gallery__note{font-size:8px;letter-spacing:.08em}.hunger-gallery__arrows{gap:5px}.hunger-gallery__arrows button{width:30px;height:30px}}
+@media(prefers-reduced-motion:reduce){.hunger-gallery__track{scroll-behavior:auto}.hunger-gallery__arrows button{transition:none}}
