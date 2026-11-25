@@ -1,0 +1,34 @@
+.theatre-play{display:grid;grid-template-columns:clamp(132px,17vw,205px) minmax(0,1fr);gap:12px;min-width:0;align-items:stretch}
+.theatre-play .theatre-viewer{grid-column:2;grid-row:1}
+.prop-tray{grid-column:1;grid-row:1}
+.theatre-play .theatre-viewer{background:#fff;min-width:0;height:min(72vw,820px);min-height:560px;max-height:820px}
+.theatre-viewer .stage-layer{position:absolute;z-index:4;inset:0;overflow:hidden;pointer-events:none}
+.stage-piece{position:absolute;width:clamp(100px,16vw,190px);max-width:48%;touch-action:none;cursor:grab;pointer-events:auto;user-select:none;filter:drop-shadow(0 3px 5px #211b1730);transform-origin:center;}
+.stage-piece:active{cursor:grabbing}.stage-piece img{width:100%;height:auto;display:block;mix-blend-mode:multiply;pointer-events:none;user-select:none}
+.stage-piece .piece-controls{position:absolute;top:2px;right:2px;display:flex;gap:3px;opacity:0;transition:opacity .16s}
+.stage-piece:hover .piece-controls,.stage-piece:focus-within .piece-controls{opacity:1}
+.piece-controls button{width:23px;height:23px;border:1px solid #8a806f;background:#f7f3e9eF;color:#302a21;border-radius:50%;font:14px/1 sans-serif;cursor:pointer;padding:0}
+.piece-watermark{position:absolute;inset:0;pointer-events:none;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;align-items:center;justify-items:center;transform:rotate(-21deg)}
+.piece-watermark span{font:8px Arial,sans-serif;letter-spacing:.04em;color:#fff9;text-shadow:0 1px 2px #30271855;white-space:nowrap}
+.stage-hint{position:absolute;z-index:5;bottom:50px;left:12px;max-width:68%;padding:6px 9px;background:#f7f4e9d9;color:#514b40;font-size:9px;line-height:1.5;pointer-events:none}
+.prop-tray{min-width:0;max-height:820px;overflow:hidden;background:#fff;border:1px solid #e4e4df;padding:10px;display:flex;flex-direction:column}
+.prop-tray-title{display:flex;flex-direction:column;gap:4px;padding:2px 1px 9px;border-bottom:1px solid #d4d0c5;color:#615b50;font:9px/1.3 Arial,sans-serif;letter-spacing:.11em}
+.prop-tray-title small{font:10px/1.4 sans-serif;letter-spacing:0;color:#777164}
+.prop-list{overflow:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:9px 2px;scrollbar-width:thin}
+.prop-option{position:relative;border:0;background:transparent;padding:3px;cursor:pointer;min-width:0}
+.prop-option:hover,.prop-option:focus-visible{outline:1px solid #85775f;outline-offset:1px}
+.prop-option img{display:block;width:100%;height:68px;object-fit:contain;mix-blend-mode:multiply}
+.prop-option span{position:absolute;right:3px;bottom:3px;background:#f7f4e9d9;padding:2px 3px;color:#554f44;font:7px Arial,sans-serif}
+.prop-help{margin:auto 0 0;padding-top:6px;color:#777164;font-size:9px;line-height:1.55}
+@media(max-width:800px){.theatre-play{grid-template-columns:1fr;gap:9px}.theatre-play .theatre-viewer,.prop-tray{grid-column:1;grid-row:auto}.theatre-play .theatre-viewer{height:clamp(340px,100vw,540px);min-height:420px}.prop-tray{max-height:none;padding:8px}.prop-list{grid-template-columns:repeat(7,minmax(72px,1fr));overflow-x:auto;overflow-y:hidden}.prop-option img{height:70px}.prop-help{margin-top:4px}}
+@media(max-width:480px){.theatre-play .theatre-viewer{height:75svh;min-height:380px;max-height:560px}.prop-list{grid-template-columns:repeat(7,minmax(64px,1fr))}.prop-option img{height:62px}.stage-hint{bottom:46px;max-width:75%;font-size:8px}}
+.moving-image-section{padding-top:clamp(48px,8vw,110px);padding-bottom:clamp(48px,8vw,110px)}
+.moving-image-section .chapter-label h2{display:flex;flex-wrap:wrap;gap:.3em;font:clamp(18px,2.2vw,28px)/1.3 var(--serif);letter-spacing:.02em}
+.moving-image-cn{color:var(--muted)}
+.moving-image-copy{margin:20px 0 0 auto;width:100%;max-width:none}
+.moving-image-copy>p{margin:0 0 18px;color:var(--muted);font:clamp(16px,2vw,22px)/1.8 var(--serif)}
+.moving-image-section .project-film{padding:0;background:transparent}
+.moving-image-section .project-film video{display:block;width:100%;max-width:none;height:auto;aspect-ratio:16/9;object-fit:contain;background:#171613}
+@media(max-width:800px){.moving-image-section{padding-top:44px;padding-bottom:52px}.moving-image-copy{width:100%}}
+
+.theatre-play .theatre-fallback{background:#fff}.theatre-play{background:#fff}

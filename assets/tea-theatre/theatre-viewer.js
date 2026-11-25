@@ -9,7 +9,7 @@ if (host) {
   const fallback = host.querySelector('.theatre-fallback');
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   } catch (error) {
     host.classList.add('viewer-failed');
     status.textContent = '3D 预览不可用，请尝试其他浏览器或设备。 · 3D preview unavailable on this device.';
@@ -21,7 +21,8 @@ if (host) {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#ece9df');
+    scene.background = null;
+    renderer.setClearColor(0xffffff, 0);
     const camera = new THREE.PerspectiveCamera(34, 1, 0.01, 100);
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;
@@ -56,7 +57,7 @@ if (host) {
       const size = bounds.getSize(new THREE.Vector3());
       const largest = Math.max(size.x, size.y, size.z);
       model.position.sub(center);
-      const distance = largest / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.32;
+      const distance = largest / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.08;
       homePosition = new THREE.Vector3(distance * 0.84, distance * 0.58, distance);
       camera.position.copy(homePosition);
       camera.near = Math.max(largest / 100, 0.01);
