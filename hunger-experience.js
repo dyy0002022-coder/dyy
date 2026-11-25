@@ -6,7 +6,12 @@ const world = document.querySelector('#hunger-world');
 const video = document.querySelector('#hunger-video');
 const status = document.querySelector('#hunger-status');
 const canvas = document.querySelector('#hunger-canvas');
-let renderer, scene, camera, controls;
+let renderer, scene, camera, controls, loadedInstallation;
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+const foodPivots = new Map();
+let activeFoodPivot = null;
+let lastPointer = null;
 
 async function loadSegmentedAsset(prefix, count, onProgress) {
   const chunks = new Array(count);
@@ -42,7 +47,107 @@ async function loadExhibitionVideo() {
     video.addEventListener('loadeddata', resolve, { once: true });
     video.addEventListener('error', reject, { once: true });
   });
-  await video.play();
+  try {
+    await video.play();
+  } catch (error) {
+    console.warn('Video is ready but autoplay was blocked; the first gesture will start it.', error);
+    world.addEventListener('pointerdown', () => video.play().catch(() => {}), { once: true });
+  }
+  if (loadedInstallation) applyVideoToScreens(loadedInstallation);
+}
+
+function applyVideoToScreens(installation) {
+  if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+  const texture = new THREE.VideoTexture(video);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.generateMipmaps = false;
+  let screensUpdated = 0;
+  installation.traverse((object) => {
+    if (!object.isMesh || !/^Screen_Mukbang_Overhead_\d+$/.test(object.name)) return;
+    object.material = object.material.clone();
+    object.material.map = texture;
+    object.material.color.set(0xffffff);
+    object.material.emissive.set(0xffffff);
+    object.material.emissiveMap = texture;
+    object.material.emissiveIntensity = .3;
+    object.material.toneMapped = false;
+    object.material.needsUpdate = true;
+    screensUpdated += 1;
+  });
+  if (screensUpdated !== 3) console.warn(`Expected 3 video screens, found ${screensUpdated}`);
+}
+
+function addFoodRotation(installation) {
+  const foods = new Map();
+  installation.updateMatrixWorld(true);
+  installation.traverse((object) => {
+    const match = object.isMesh && object.name.match(/^FoodModel_(\d+)_/);
+    if (!match) return;
+    if (!foods.has(match[1])) foods.set(match[1], []);
+    foods.get(match[1]).push(object);
+  });
+
+  for (const [station, objects] of foods) {
+    const parent = objects[0].parent;
+    if (!parent || objects.some((object) => object.parent !== parent)) continue;
+    const bounds = new THREE.Box3();
+    objects.forEach((object) => bounds.expandByObject(object));
+    const center = parent.worldToLocal(bounds.getCenter(new THREE.Vector3()));
+    const pivot = new THREE.Group();
+    pivot.name = `FoodModel_Rotation_${station}`;
+    pivot.position.copy(center);
+    parent.add(pivot);
+    parent.updateMatrixWorld(true);
+
+    objects.forEach((object) => {
+      const worldMatrix = object.matrixWorld.clone();
+      parent.remove(object);
+      pivot.add(object);
+      object.matrix.copy(pivot.matrixWorld.clone().invert().multiply(worldMatrix));
+      object.matrix.decompose(object.position, object.quaternion, object.scale);
+      object.matrixAutoUpdate = true;
+      object.updateMatrix();
+      foodPivots.set(object, pivot);
+    });
+  }
+}
+
+function installFoodDrag() {
+  const updatePointer = (event) => {
+    const rect = canvas.getBoundingClientRect();
+    pointer.set(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
+  };
+
+  canvas.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0) return;
+    updatePointer(event);
+    raycaster.setFromCamera(pointer, camera);
+    const hit = raycaster.intersectObjects([...foodPivots.keys()], false)[0];
+    if (!hit) return;
+    activeFoodPivot = foodPivots.get(hit.object);
+    lastPointer = { x: event.clientX, y: event.clientY };
+    controls.enabled = false;
+    canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener('pointermove', (event) => {
+    if (!activeFoodPivot || !lastPointer) return;
+    const dx = event.clientX - lastPointer.x;
+    const dy = event.clientY - lastPointer.y;
+    activeFoodPivot.rotation.y += dx * .012;
+    activeFoodPivot.rotation.x += dy * .012;
+    lastPointer = { x: event.clientX, y: event.clientY };
+  });
+  const finish = () => {
+    if (!activeFoodPivot) return;
+    activeFoodPivot = null;
+    lastPointer = null;
+    controls.enabled = true;
+  };
+  canvas.addEventListener('pointerup', finish);
+  canvas.addEventListener('pointercancel', finish);
+  canvas.addEventListener('lostpointercapture', finish);
 }
 
 function resize() {
@@ -100,10 +205,15 @@ function prepareViewer() {
     installation.position.z -= center.z;
     installation.position.y -= bounds.min.y;
     scene.add(installation);
+    loadedInstallation = installation;
+    addFoodRotation(installation);
+    installFoodDrag();
     const size = bounds.getSize(new THREE.Vector3());
     const span = Math.max(size.x, size.y, size.z, 1);
     const viewCenterY = span * .45;
-    camera.position.set(span * 1.35, viewCenterY + span * .92, span * 1.7);
+    // Start from the presentation side so the angled overhead screens show
+    // their active faces, as in the installation reference.
+    camera.position.set(-span * 1.35, viewCenterY + span * .92, span * 1.7);
     camera.near = Math.max(span / 800, .01);
     camera.far = span * 12;
     camera.updateProjectionMatrix();
@@ -112,23 +222,7 @@ function prepareViewer() {
     controls.maxDistance = span * 3.8;
     controls.update();
 
-    const texture = new THREE.VideoTexture(video);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.LinearFilter;
-    texture.generateMipmaps = false;
-    for (const name of ['Screen_Mukbang_Overhead_0', 'Screen_Mukbang_Overhead_1', 'Screen_Mukbang_Overhead_2']) {
-      const screen = installation.getObjectByName(name);
-      if (!screen?.isMesh) continue;
-      screen.material = screen.material.clone();
-      screen.material.map = texture;
-      screen.material.color.set(0xffffff);
-      screen.material.emissive.set(0xffffff);
-      screen.material.emissiveMap = texture;
-      screen.material.emissiveIntensity = .3;
-      screen.material.toneMapped = false;
-      screen.material.needsUpdate = true;
-    }
+    applyVideoToScreens(installation);
     status.hidden = true;
     animate();
   }, (error) => {
@@ -142,6 +236,6 @@ function prepareViewer() {
 
 prepareViewer();
 loadExhibitionVideo().catch((error) => {
-  status.textContent = '展览视频未载入，请通过网站地址打开此页面';
+  // Keep the embedded screen imagery visible if the browser cannot decode video.
   console.error('Hunger exhibition video failed to load', error);
 });
