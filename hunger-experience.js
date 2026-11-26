@@ -3,17 +3,21 @@ import { GLTFLoader } from './vendor/three/GLTFLoader.js';
 import { OrbitControls } from './vendor/three/OrbitControls.js';
 
 const world = document.querySelector('#hunger-world');
-const video = document.querySelector('#hunger-video');
+const introVideo = document.querySelector('#hunger-intro-video');
 const status = document.querySelector('#hunger-status');
 const canvas = document.querySelector('#hunger-canvas');
+const musicToggle = document.querySelector('#hunger-music-toggle');
+const enterButton = document.querySelector('#hunger-enter');
+const introCaption = document.querySelector('#hunger-intro-caption');
 let renderer, scene, camera, controls, loadedInstallation;
+let screenVideoLoaded = false;
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const foodPivots = new Map();
 let activeFoodPivot = null;
 let lastPointer = null;
 
-async function loadSegmentedAsset(prefix, count, onProgress) {
+async function loadSegmentedAsset(prefix, count, onProgress, mediaType = null) {
   const chunks = new Array(count);
   let nextIndex = 0;
   let completed = 0;
@@ -30,6 +34,7 @@ async function loadSegmentedAsset(prefix, count, onProgress) {
     }
   };
   await Promise.all(Array.from({ length: Math.min(4, count) }, worker));
+  if (mediaType) return new Blob(chunks, { type: mediaType });
   const merged = new Uint8Array(chunks.reduce((total, chunk) => total + chunk.byteLength, 0));
   let offset = 0;
   for (const chunk of chunks) {
@@ -39,25 +44,63 @@ async function loadSegmentedAsset(prefix, count, onProgress) {
   return merged.buffer;
 }
 
-async function loadExhibitionVideo() {
-  const videoData = await loadSegmentedAsset('project3-exhibition-web', 23);
-  video.src = URL.createObjectURL(new Blob([videoData], { type: 'video/mp4' }));
+async function loadIntroVideo() {
+  const videoData = await loadSegmentedAsset('hunger-intro', 25, null, 'video/mp4');
+  introVideo.src = URL.createObjectURL(videoData);
+  introVideo.load();
+  await new Promise((resolve, reject) => {
+    introVideo.addEventListener('loadeddata', resolve, { once: true });
+    introVideo.addEventListener('error', reject, { once: true });
+  });
+  try {
+    await introVideo.play();
+  } catch (error) {
+    console.warn('Opening video is ready; waiting for a gesture to play.', error);
+  }
+}
+
+function enterInstallation() {
+  world.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+enterButton.addEventListener('click', enterInstallation);
+introVideo.addEventListener('ended', () => {
+  introCaption.textContent = '影像结束 · 正在进入 Hunger 装置';
+  window.setTimeout(enterInstallation, 900);
+});
+musicToggle.addEventListener('click', async () => {
+  introVideo.muted = !introVideo.muted;
+  musicToggle.setAttribute('aria-pressed', String(!introVideo.muted));
+  musicToggle.textContent = introVideo.muted ? '开启背景音乐 · SOUND ON' : '关闭背景音乐 · SOUND OFF';
+  if (!introVideo.muted) {
+    try { await introVideo.play(); } catch (error) { console.warn('Could not start audio playback.', error); }
+  }
+});
+
+async function loadScreenVideo(installation) {
+  if (screenVideoLoaded) return;
+  screenVideoLoaded = true;
+  const video = document.createElement('video');
+  video.muted = true;
+  video.loop = true;
+  video.playsInline = true;
+  video.preload = 'auto';
+  const videoData = await loadSegmentedAsset('hunger-screens', 36, (loaded, total) => {
+    status.hidden = false;
+    status.textContent = `正在载入屏幕影像… ${Math.round(loaded / total * 100)}%`;
+  }, 'video/quicktime');
+  video.src = URL.createObjectURL(videoData);
   video.load();
   await new Promise((resolve, reject) => {
     video.addEventListener('loadeddata', resolve, { once: true });
     video.addEventListener('error', reject, { once: true });
   });
-  try {
-    await video.play();
-  } catch (error) {
-    console.warn('Video is ready but autoplay was blocked; the first gesture will start it.', error);
-    world.addEventListener('pointerdown', () => video.play().catch(() => {}), { once: true });
-  }
-  if (loadedInstallation) applyVideoToScreens(loadedInstallation);
+  try { await video.play(); } catch (error) { console.warn('Screen video is ready but waiting for a gesture.', error); }
+  if (applyVideoToScreens(installation, video)) status.hidden = true;
 }
 
-function applyVideoToScreens(installation) {
-  if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+function applyVideoToScreens(installation, video) {
+  if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return false;
   const texture = new THREE.VideoTexture(video);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.minFilter = THREE.LinearFilter;
@@ -69,6 +112,7 @@ function applyVideoToScreens(installation) {
     object.material = object.material.clone();
     object.material.map = texture;
     object.material.color.set(0xffffff);
+    object.material.side = THREE.FrontSide;
     object.material.emissive.set(0xffffff);
     object.material.emissiveMap = texture;
     object.material.emissiveIntensity = .3;
@@ -77,6 +121,7 @@ function applyVideoToScreens(installation) {
     screensUpdated += 1;
   });
   if (screensUpdated !== 3) console.warn(`Expected 3 video screens, found ${screensUpdated}`);
+  return screensUpdated === 3;
 }
 
 function addFoodRotation(installation) {
@@ -222,9 +267,19 @@ function prepareViewer() {
     controls.maxDistance = span * 3.8;
     controls.update();
 
-    applyVideoToScreens(installation);
     status.hidden = true;
     animate();
+    const screenObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        screenObserver.disconnect();
+        loadScreenVideo(installation).catch((error) => {
+          status.hidden = false;
+          status.textContent = '屏幕影像暂时无法载入；装置仍可拖动查看';
+          console.error('Hunger screen video failed to load', error);
+        });
+      }
+    }, { threshold: 0.08 });
+    screenObserver.observe(world);
   }, (error) => {
     status.textContent = '装置模型未载入，请通过网站地址打开此页面';
     console.error('Hunger installation failed to load', error);
@@ -235,7 +290,7 @@ function prepareViewer() {
 }
 
 prepareViewer();
-loadExhibitionVideo().catch((error) => {
-  // Keep the embedded screen imagery visible if the browser cannot decode video.
-  console.error('Hunger exhibition video failed to load', error);
+loadIntroVideo().catch((error) => {
+  introCaption.textContent = '开场影像暂时无法载入，可继续向下进入装置';
+  console.error('Hunger opening video failed to load', error);
 });
