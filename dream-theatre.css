@@ -47,3 +47,18 @@
 .theatre-play .theatre-viewer{min-height:620px;height:min(76vw,900px);max-height:900px}
 .spiral-gallery-frame{background:#fff}
 @media(max-width:800px){.theatre-copy{width:calc(100% - 48px);min-height:calc(100svh - 80px);padding:92px 0 60px}.theatre-copy .back{top:24px;left:0}.theatre-copy .project-kicker{margin:0 0 22px}.theatre-copy h1{font-size:clamp(46px,11vw,76px)}.theatre-copy .project-deck{margin:38px auto 18px}.theatre-play .theatre-viewer{height:clamp(540px,120vw,760px);min-height:500px}}
+
+/* Restore the requested split composition: project copy left, one live model right. */
+.theatre-split.wrap{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:clamp(28px,5vw,76px);align-items:center;width:100%;min-height:calc(100svh - 80px);padding:clamp(36px,5vw,76px);background:#fff}
+.theatre-copy{grid-column:1;grid-row:1;width:100%;min-height:0;margin:0;padding:72px 0 48px;align-items:flex-start;text-align:left}
+.theatre-copy .back{left:0;top:18px}
+.theatre-copy .project-kicker{order:0;margin:0 0 26px;text-align:left}
+.theatre-copy h1{order:1;text-align:left;font-size:clamp(46px,5vw,78px);line-height:1.02;letter-spacing:-.035em}
+.theatre-copy .project-deck{display:block;order:2;margin:32px 0 16px;text-align:left;font-size:clamp(19px,2vw,28px)}
+.theatre-summary{order:3;margin:0;text-align:left;font-size:clamp(15px,1.3vw,19px);line-height:1.85}
+.theatre-summary::after{content:none}
+.theatre-play{grid-column:2;grid-row:1;grid-template-columns:clamp(110px,13vw,168px) minmax(0,1fr);gap:8px;width:100%;min-width:0}
+.theatre-play .theatre-viewer{grid-column:2;height:min(72svh,760px);min-height:460px;max-height:760px}
+.prop-tray{grid-column:1;grid-row:1}
+.theatre-fallback{display:none!important}
+@media(max-width:800px){.theatre-split.wrap{grid-template-columns:1fr;gap:20px;padding:24px}.theatre-copy{grid-column:1;grid-row:1;width:100%;min-height:0;padding:72px 0 24px;align-items:flex-start}.theatre-copy .project-kicker{margin:0 0 20px}.theatre-copy h1{text-align:left;font-size:clamp(42px,9vw,68px)}.theatre-copy .project-deck{margin:24px 0 12px;text-align:left}.theatre-summary{text-align:left}.theatre-play{grid-column:1;grid-row:2;grid-template-columns:1fr}.theatre-play .theatre-viewer{grid-column:1;grid-row:1;height:70svh;min-height:460px}.prop-tray{grid-column:1;grid-row:2}}
