@@ -75,7 +75,7 @@ let activePreview=null;function openFilm(src,label,preview=null){activePreview=p
 
 const opening=document.getElementById('mirror-opening'),openingVideo=document.getElementById('mirror-opening-video'),enterProject=document.getElementById('mirror-enter-project'),unmute=document.getElementById('mirror-unmute'),playToggle=document.getElementById('mirror-play-toggle');
 let openingFinished=false;
-function finishOpening(){if(openingFinished)return;openingFinished=true;opening.classList.add('is-finished');opening.setAttribute('aria-hidden','true');openingVideo.pause();setTimeout(()=>{const target=document.querySelector('.source-pages figure:nth-of-type(2)');if(target)target.scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'})},220)}
+function finishOpening(){if(openingFinished)return;openingFinished=true;opening.classList.add('is-finished');opening.setAttribute('aria-hidden','true');openingVideo.pause();setTimeout(()=>{const target=document.querySelector('.source-pages figure:nth-of-type(2)');if(target)target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'})},220)}
 openingVideo.addEventListener('ended',finishOpening,{once:true});
 enterProject.addEventListener('click',finishOpening);
 unmute.addEventListener('click',()=>{openingVideo.muted=false;openingVideo.volume=1;openingVideo.play().catch(()=>{});unmute.textContent='声音已开启';unmute.disabled=true});
