@@ -58,14 +58,12 @@ const screenObserver='IntersectionObserver'in window?new IntersectionObserver(en
 buttons.forEach(btn=>screenObserver?screenObserver.observe(btn):previewFor(btn).play().catch(()=>{}));
 let activePreview=null;function openFilm(src,label,preview=null){activePreview=preview;caption.textContent=label+' · ESC 或点击 × 返回第 3 页';film.src=src;filmDialog.showModal();film.load();film.play().catch(()=>{})}
 
-const opening=document.getElementById('mirror-opening'),openingVideo=document.getElementById('mirror-opening-video'),enterProject=document.getElementById('mirror-enter-project'),unmute=document.getElementById('mirror-unmute'),playToggle=document.getElementById('mirror-play-toggle');
+const opening=document.getElementById('project-film-opening'),openingVideo=document.getElementById('mirror-opening-video'),enterProject=document.getElementById('mirror-enter-project'),unmute=document.getElementById('mirror-unmute');
 let openingFinished=false;
-function finishOpening(){if(openingFinished)return;openingFinished=true;opening.classList.add('is-finished');opening.setAttribute('aria-hidden','true');openingVideo.pause();setTimeout(()=>{const target=document.querySelector('.source-pages figure:nth-of-type(2)');if(target)target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'})},220)}
-openingVideo.addEventListener('ended',finishOpening,{once:true});
-enterProject.addEventListener('click',finishOpening);
+function finishOpening(){if(openingFinished)return;openingFinished=true;opening.classList.add('is-ended');openingVideo.pause();setTimeout(()=>{const target=document.querySelector('.source-pages figure:nth-of-type(2)');if(target)target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'})},150)}
+openingVideo.addEventListener('ended',finishOpening,{once:true});enterProject.addEventListener('click',finishOpening);
 unmute.addEventListener('click',()=>{openingVideo.muted=false;openingVideo.volume=1;openingVideo.play().catch(()=>{});unmute.textContent='声音已开启';unmute.disabled=true});
-playToggle.addEventListener('click',()=>{if(openingVideo.paused){openingVideo.play().catch(()=>{});playToggle.textContent='Ⅱ';playToggle.setAttribute('aria-label','暂停影片')}else{openingVideo.pause();playToggle.textContent='▶';playToggle.setAttribute('aria-label','播放影片')}});
-openingVideo.play().catch(()=>{playToggle.textContent='▶';playToggle.setAttribute('aria-label','播放影片')});
+openingVideo.play().catch(()=>{});
 document.getElementById('open-project-film').addEventListener('click',()=>openFilm('assets/mirror-media/project2-intro.mp4?v=20261117','项目影片'));
 buttons.forEach(btn=>btn.addEventListener('click',()=>{const preview=previewFor(btn);preview.pause();openFilm(btn.dataset.src,btn.dataset.label,preview)}));
 filmDialog.addEventListener('close',()=>{film.pause();film.removeAttribute('src');film.load();if(activePreview)activePreview.play().catch(()=>{});activePreview=null});
