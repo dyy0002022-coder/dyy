@@ -45,7 +45,23 @@ body.scroll-ready .source-pages figure.is-visible img{opacity:1;transform:none;c
 .full-screen-video video{max-width:100vw;max-height:100svh}
 }
 @media(prefers-reduced-motion:reduce){body.scroll-ready .source-pages img{opacity:1;transform:none;clip-path:none;transition:none!important}.device-video-trigger::after{transition:none}}
-</style></head><body id="top"><a class="skip" href="#main">跳至内容 / Skip to content</a><header class="nav"><a class="wordmark" href="index.html" aria-label="Yingying Dong home">YINGYING DONG<span>董盈盈</span></a><nav aria-label="Main navigation"><a href="index.html#work"><span class="" data-zh="作品" data-en="Works">作品</span></a><a href="about.html"><span class="" data-zh="关于" data-en="About">关于</span></a><a href="#contact"><span class="" data-zh="联系" data-en="Contact">联系</span></a><button class="lang" aria-label="Switch language">EN</button></nav></header><main id="main" class="project"><section class="source-pages" aria-label="Images in the Mirror 项目设计页面">
+
+<style id="mirror-opening-style">
+.mirror-opening{position:fixed;inset:0;z-index:1000;display:grid;grid-template-rows:1fr auto;background:#080907;color:#f7f5ef;opacity:1;visibility:visible;transition:opacity .9s ease,visibility .9s}
+.mirror-opening.is-finished{opacity:0;visibility:hidden;pointer-events:none}
+.mirror-opening video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#080907}
+.mirror-opening::after{content:"";position:absolute;inset:55% 0 0;background:linear-gradient(transparent,#080907b8);pointer-events:none}
+.mirror-opening-copy{position:absolute;z-index:1;left:clamp(20px,5vw,80px);bottom:clamp(26px,5vh,64px);display:grid;gap:14px}
+.mirror-opening-kicker{font:11px/1.4 Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#ddd3b8}
+.mirror-opening-title{margin:0;font:clamp(26px,5vw,62px)/1.05 "Big Caslon","Times New Roman",serif;font-weight:400}
+.mirror-opening-actions{display:flex;gap:12px;align-items:center}
+.mirror-opening button{border:1px solid #eee9dc;background:#141510c9;color:#f7f5ef;padding:12px 17px;font:12px/1.2 Arial,"PingFang SC",sans-serif;letter-spacing:.05em;cursor:pointer}
+.mirror-opening button:hover{background:#f7f5ef;color:#171814}
+.mirror-opening-controls{position:absolute;z-index:2;right:clamp(20px,4vw,54px);bottom:clamp(26px,5vh,64px);display:flex;gap:10px}
+.mirror-opening-controls button{width:44px;height:44px;padding:0;border-radius:50%;font-size:18px}
+@media(max-width:600px){.mirror-opening-copy{right:20px;bottom:100px}.mirror-opening-controls{right:20px;bottom:24px}.mirror-opening-actions button{padding:11px 13px}}
+@media(prefers-reduced-motion:reduce){.mirror-opening,.mirror-opening.is-finished{transition:none}}
+</style></style></head><body id="top"><a class="skip" href="#main">跳至内容 / Skip to content</a><section class="mirror-opening" id="mirror-opening" aria-label="Images in the Mirror 项目影片开场"><video id="mirror-opening-video" autoplay muted playsinline controls preload="auto" poster="assets/mirror-pages-hi/page-03.png"><source src="assets/mirror-media/project2-intro.mp4" type="video/mp4"></video><div class="mirror-opening-copy"><span class="mirror-opening-kicker">PROJECT FILM · IMAGES IN THE MIRROR</span><h1 class="mirror-opening-title">Images in the Mirror</h1><div class="mirror-opening-actions"><button type="button" id="mirror-enter-project">跳过影片，进入项目 ↓</button><button type="button" id="mirror-unmute">开启声音</button></div></div><div class="mirror-opening-controls"><button type="button" id="mirror-play-toggle" aria-label="暂停影片">Ⅱ</button></div></section><header class="nav"><a class="wordmark" href="index.html" aria-label="Yingying Dong home">YINGYING DONG<span>董盈盈</span></a><nav aria-label="Main navigation"><a href="index.html#work"><span class="" data-zh="作品" data-en="Works">作品</span></a><a href="about.html"><span class="" data-zh="关于" data-en="About">关于</span></a><a href="#contact"><span class="" data-zh="联系" data-en="Contact">联系</span></a><button class="lang" aria-label="Switch language">EN</button></nav></header><main id="main" class="project"><section class="source-pages" aria-label="Images in the Mirror 项目设计页面">
 <figure class="is-visible"><img src="assets/mirror-pages-hi/page-01.png?v=20261117" alt="Images in the Mirror 项目封面，字体与排版来自项目源稿" fetchpriority="high" decoding="async"></figure>
 <figure><img src="assets/mirror-pages-hi/page-02.png?v=20261117" alt="Images in the Mirror 项目页面 2" loading="lazy" decoding="async"></figure>
 <figure class="device-artboard" id="exhibition-page"><img src="assets/mirror-pages-hi/page-03.png?v=20261117" alt="Images in the Mirror 项目页面 3：展览墙及平板、手机屏幕" loading="lazy" decoding="async"><button class="device-video-trigger tablet-screen" type="button" data-src="assets/mirror-media/tablet.mp4?v=20261117" data-label="平板屏幕动画" aria-label="放大观看平板屏幕动画"><video data-source="assets/mirror-media/tablet.mp4?v=20261117" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video></button><button class="device-video-trigger phone-screen" type="button" data-src="assets/mirror-media/phone.mp4?v=20261117" data-label="手机竖屏影像" aria-label="放大观看手机竖屏视频"><video data-source="assets/mirror-media/phone.mp4?v=20261117" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video></button><button class="project-film-page-button" id="open-project-film" type="button">可选观看项目影片 ↗</button></figure>
@@ -56,6 +72,15 @@ function previewFor(btn){const v=btn.querySelector('video');if(!v.src){v.src=v.d
 const screenObserver='IntersectionObserver'in window?new IntersectionObserver(entries=>entries.forEach(e=>{const v=previewFor(e.target);if(e.isIntersecting)v.play().catch(()=>{});else v.pause()}),{rootMargin:'120px 0px',threshold:.01}):null;
 buttons.forEach(btn=>screenObserver?screenObserver.observe(btn):previewFor(btn).play().catch(()=>{}));
 let activePreview=null;function openFilm(src,label,preview=null){activePreview=preview;caption.textContent=label+' · ESC 或点击 × 返回第 3 页';film.src=src;filmDialog.showModal();film.load();film.play().catch(()=>{})}
+
+const opening=document.getElementById('mirror-opening'),openingVideo=document.getElementById('mirror-opening-video'),enterProject=document.getElementById('mirror-enter-project'),unmute=document.getElementById('mirror-unmute'),playToggle=document.getElementById('mirror-play-toggle');
+let openingFinished=false;
+function finishOpening(){if(openingFinished)return;openingFinished=true;opening.classList.add('is-finished');opening.setAttribute('aria-hidden','true');openingVideo.pause();setTimeout(()=>{const target=document.querySelector('.source-pages figure:nth-of-type(2)');if(target)target.scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'})},220)}
+openingVideo.addEventListener('ended',finishOpening,{once:true});
+enterProject.addEventListener('click',finishOpening);
+unmute.addEventListener('click',()=>{openingVideo.muted=false;openingVideo.volume=1;openingVideo.play().catch(()=>{});unmute.textContent='声音已开启';unmute.disabled=true});
+playToggle.addEventListener('click',()=>{if(openingVideo.paused){openingVideo.play().catch(()=>{});playToggle.textContent='Ⅱ';playToggle.setAttribute('aria-label','暂停影片')}else{openingVideo.pause();playToggle.textContent='▶';playToggle.setAttribute('aria-label','播放影片')}});
+openingVideo.play().catch(()=>{playToggle.textContent='▶';playToggle.setAttribute('aria-label','播放影片')});
 document.getElementById('open-project-film').addEventListener('click',()=>openFilm('assets/mirror-media/project2-intro.mp4?v=20261117','项目影片'));
 buttons.forEach(btn=>btn.addEventListener('click',()=>{const preview=previewFor(btn);preview.pause();openFilm(btn.dataset.src,btn.dataset.label,preview)}));
 filmDialog.addEventListener('close',()=>{film.pause();film.removeAttribute('src');film.load();if(activePreview)activePreview.play().catch(()=>{});activePreview=null});
