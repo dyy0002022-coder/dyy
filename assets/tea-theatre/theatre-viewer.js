@@ -57,7 +57,7 @@ if (host) {
       const size = bounds.getSize(new THREE.Vector3());
       const largest = Math.max(size.x, size.y, size.z);
       model.position.sub(center);
-      const distance = largest / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.08;
+      const distance = largest / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.55;
       homePosition = new THREE.Vector3(distance * 0.84, distance * 0.58, distance);
       camera.position.copy(homePosition);
       camera.near = Math.max(largest / 100, 0.01);
@@ -67,7 +67,7 @@ if (host) {
       controls.minDistance = largest * 0.78;
       controls.maxDistance = largest * 5;
       controls.update();
-      fallback.hidden = true;
+      if (fallback) fallback.hidden = true;
       status.hidden = true;
     }, (event) => {
       const percent = event.total ? Math.round(event.loaded / event.total * 100) : 0;

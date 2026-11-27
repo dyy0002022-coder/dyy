@@ -4,7 +4,7 @@
 .theatre-play .theatre-viewer{background:#fff;min-width:0;height:min(72vw,820px);min-height:560px;max-height:820px}
 .theatre-viewer .stage-layer{position:absolute;z-index:4;inset:0;overflow:hidden;pointer-events:none}
 .stage-piece{position:absolute;width:clamp(100px,16vw,190px);max-width:48%;touch-action:none;cursor:grab;pointer-events:auto;user-select:none;filter:drop-shadow(0 3px 5px #211b1730);transform-origin:center;}
-.stage-piece:active{cursor:grabbing}.stage-piece img{width:100%;height:auto;display:block;mix-blend-mode:multiply;pointer-events:none;user-select:none}
+.stage-piece:active{cursor:grabbing}.stage-piece img{width:100%;height:auto;display:block;pointer-events:none;user-select:none}
 .stage-piece .piece-controls{position:absolute;top:2px;right:2px;display:flex;gap:3px;opacity:0;transition:opacity .16s}
 .stage-piece:hover .piece-controls,.stage-piece:focus-within .piece-controls{opacity:1}
 .piece-controls button{width:23px;height:23px;border:1px solid #8a806f;background:#f7f3e9eF;color:#302a21;border-radius:50%;font:14px/1 sans-serif;cursor:pointer;padding:0}

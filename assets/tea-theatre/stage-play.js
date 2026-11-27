@@ -4,13 +4,13 @@
   const host = stage?.closest('.theatre-viewer');
   if (!stage || !list || !host) return;
   const pieces = [
-    ['page-02.jpg','theatre installation'],['page-03.jpg','stage composition'],['page-04.jpg','story scene'],['page-05.jpg','final installation'],['page-06.jpg','image collage'],['page-07.jpg','theatre performance'],['page-03.jpg','collage detail'],['page-05.jpg','stage view']
+    ['8(1).png','Tea garden'],['9.png','Boston tea house'],['a(1).png','Tea shipping archive'],['b(1).png','Tea and elephant'],['c(1).png','Trade route map'],['d(1).png','Tea landscape'],['e(1).png','Tea plantation collage'],['f(1).png','Sailing ship'],['g(1).png','Garden gathering'],['h(1).png','Tea botanical plate'],['i(1).png','Elephant illustration'],['l(1).png','Tea archive collage'],['o(1).png','Tea garden collage'],['u(1).png','Tea room and storyteller']
   ];
   let sequence = 0;
   const wm = '© Yingying Dong · 董盈盈';
   pieces.forEach(([file,label],i) => {
     const button=document.createElement('button'); button.className='prop-option'; button.type='button'; button.draggable=true; button.setAttribute('aria-label',`Add ${label} to stage`);
-    const img=document.createElement('img'); img.src=`assets/dream-pages/${encodeURIComponent(file)}`; img.alt=label; img.loading='lazy';
+    const img=document.createElement('img'); img.src=`assets/tea-theatre/props/${encodeURIComponent(file)}`; img.alt=label; img.loading='lazy';
     button.append(img); button.addEventListener('click',()=>addPiece(i));
     button.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',String(i));e.dataTransfer.effectAllowed='copy'});
     list.append(button);
@@ -20,7 +20,7 @@
   function addPiece(i,x=48+(sequence%4)*3,y=42+(sequence%4)*4){
     sequence++;
     const [file,label]=pieces[i],el=document.createElement('div'); el.className='stage-piece';el.tabIndex=0;el.style.left=`${x}%`;el.style.top=`${y}%`;el.style.transform='translate(-50%,-50%) rotate(0deg) scale(1)';el.dataset.scale='1';el.dataset.angle='0';
-    const img=document.createElement('img');img.src=`assets/dream-pages/${encodeURIComponent(file)}`;img.alt=label;img.draggable=false;
+    const img=document.createElement('img');img.src=`assets/tea-theatre/props/${encodeURIComponent(file)}`;img.alt=label;img.draggable=false;
     const tools=document.createElement('div');tools.className='piece-controls';const rotate=document.createElement('button');rotate.type='button';rotate.title='Rotate';rotate.setAttribute('aria-label','Rotate image');rotate.textContent='↻';rotate.onclick=()=>{el.dataset.angle=String((Number(el.dataset.angle)+15)%360);apply()};const remove=document.createElement('button');remove.type='button';remove.title='Remove';remove.setAttribute('aria-label','Remove image');remove.textContent='×';remove.onclick=()=>el.remove();tools.append(rotate,remove);el.append(img,tools);stage.append(el);dragPiece(el);el.focus();
     function apply(){el.style.transform=`translate(-50%,-50%) rotate(${el.dataset.angle}deg) scale(${el.dataset.scale})`}
   }
