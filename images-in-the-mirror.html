@@ -84,15 +84,22 @@ body.scroll-ready .source-pages figure.is-visible img{opacity:1;transform:none;c
 #mirror-cover { scroll-margin-top: var(--nav-h, 80px); }
 @media (max-width: 600px) { #mirror-cover { scroll-margin-top: var(--nav-h, 66px); } }
 
-.mirror-strip { background: #191919; padding: clamp(24px, 3vw, 64px) 0; }
-.mirror-strip-viewport { overflow: hidden; cursor: grab; touch-action: pan-y; }
+.mirror-strip {
+  --strip-space: clamp(44px, 3.5vw, 64px);
+  display: grid;
+  grid-template-rows: var(--strip-space) auto var(--strip-space);
+  background: #191919;
+}
+.source-pages .mirror-before-strip { background: #191919; }
+#main + footer#contact { padding-top: 0; }
+.mirror-strip-viewport { grid-row: 2; overflow: hidden; cursor: grab; touch-action: pan-y; }
 .mirror-strip-viewport.is-dragging { cursor: grabbing; }
 .mirror-strip-track { display: flex; }
 .mirror-strip-tile { position: relative; flex: 0 0 max(100%, 1000px); aspect-ratio: 2400 / 284; overflow: hidden; }
-.source-pages .mirror-strip-tile img { position: absolute; top: -214.084507%; width: 100%; height: auto; pointer-events: none; }
-.mirror-strip-controls { display: flex; justify-content: flex-end; gap: 6px; padding: 8px clamp(12px, 3vw, 32px) 0; }
+.source-pages .mirror-strip-tile img { display: block; width: 100%; height: 100%; object-fit: cover !important; pointer-events: none; }
+.mirror-strip-controls { grid-row: 3; display: flex; align-items: center; justify-content: flex-end; gap: 6px; padding-inline: clamp(12px, 3vw, 32px); }
 .mirror-strip-controls[hidden] { display: none; }
-.mirror-strip-controls button { border: 1px solid #656565; border-radius: 4px; padding: 4px 9px; background: #191919; color: #eee; cursor: pointer; }
+.mirror-strip-controls button { border: 0; padding: 6px 10px; background: transparent; color: #eee; cursor: pointer; }
 </style></head><body id="top"><a class="skip" href="#main">跳至内容 / Skip to content</a><header class="nav"><a class="wordmark" href="index.html" aria-label="Yingying Dong home">YINGYING DONG<span>董盈盈</span></a><nav aria-label="Main navigation"><a href="index.html#work"><span class="" data-zh="作品" data-en="Works">作品</span></a><a href="about.html"><span class="" data-zh="关于" data-en="About">关于</span></a><a href="#contact"><span class="" data-zh="联系" data-en="Contact">联系</span></a><button class="lang" aria-label="Switch language">EN</button></nav></header><main id="main" class="project">
 <section class="mirror-living-opening" aria-label="Images in the Mirror · 项目开场">
   <div class="mirror-film-frame" id="mirror-film-frame">
@@ -109,10 +116,10 @@ body.scroll-ready .source-pages figure.is-visible img{opacity:1;transform:none;c
 <figure class="is-visible" id="mirror-cover" tabindex="-1"><img src="assets/mirror-pages-hi/page-01.png?v=20261117" width="2400" height="1500" alt="Images in the Mirror 原设计标题页" decoding="async"></figure>
 <figure><img src="assets/mirror-pages-hi/overview-psd.webp" width="4800" height="3000" alt="Images in the Mirror 项目概述与桌面装置" loading="lazy" decoding="async"></figure>
 <figure class="device-artboard" id="exhibition-page"><img src="assets/mirror-pages-hi/page-03.png?v=20261117" alt="Images in the Mirror 项目页面 3：展览墙及平板、手机屏幕" loading="lazy" decoding="async"><button class="device-video-trigger tablet-screen" type="button" data-src="assets/mirror-media/tablet.mp4?v=20261117" data-label="平板屏幕动画" aria-label="放大观看平板屏幕动画"><video data-source="assets/mirror-media/tablet.mp4?v=20261117" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video></button><button class="device-video-trigger phone-screen" type="button" data-src="assets/mirror-media/phone.mp4?v=20261117" data-label="手机竖屏影像" aria-label="放大观看手机竖屏视频"><video data-source="assets/mirror-media/phone.mp4?v=20261117" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video></button><button class="project-film-page-button" id="open-project-film" type="button">可选观看项目影片 ↗</button></figure>
-<figure><img src="assets/mirror-pages-hi/page-04.png?v=20261117" alt="Images in the Mirror 项目页面 4" loading="lazy" decoding="async"></figure><figure><img src="assets/mirror-pages-hi/page-05.png?v=20261117" alt="Images in the Mirror 项目页面 5" loading="lazy" decoding="async"></figure><figure><img src="assets/mirror-pages-hi/page-06.png?v=20261117" alt="Images in the Mirror 项目页面 6" loading="lazy" decoding="async"></figure><div class="mirror-strip" id="mirror-stills" role="region" aria-label="城市影像 · City film stills">
+<figure><img src="assets/mirror-pages-hi/page-04.png?v=20261117" alt="Images in the Mirror 项目页面 4" loading="lazy" decoding="async"></figure><figure><img src="assets/mirror-pages-hi/page-05.png?v=20261117" alt="Images in the Mirror 项目页面 5" loading="lazy" decoding="async"></figure><figure class="mirror-before-strip"><img src="assets/mirror-pages-hi/page-06.png?v=20261117" alt="Images in the Mirror 项目页面 6" loading="lazy" decoding="async"></figure><div class="mirror-strip" id="mirror-stills" role="region" aria-label="城市影像 · City film stills">
   <div class="mirror-strip-viewport">
     <div class="mirror-strip-track">
-      <div class="mirror-strip-tile"><img src="assets/mirror-pages-hi/page-07.png?v=20261117" width="2400" height="1500" alt="五幅上海城市影像，从地图上的光迹到高楼与天际线" loading="lazy" decoding="async" draggable="false"></div>
+      <div class="mirror-strip-tile"><img src="assets/mirror-pages-hi/city-stills.webp" width="2400" height="284" alt="五幅上海城市影像，从地图上的光迹到高楼与天际线" loading="lazy" decoding="async" draggable="false"></div>
     </div>
   </div>
   <div class="mirror-strip-controls" hidden>
