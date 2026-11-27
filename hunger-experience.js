@@ -102,58 +102,104 @@ function attachScreenVideo(overhead) {
   return video;
 }
 
-function addFoodRotation(installation) {
-  const stations = new Map();
+function createDeviceFeeds(installation, loader) {
+  const screens = [];
+  const obsoleteFood = [];
+  let bowl;
   installation.traverse((object) => {
-    if (!/^FoodModel_\d+_/.test(object.userData.name ?? '')) return;
-    if (!stations.has(object.parent)) stations.set(object.parent, []);
-    stations.get(object.parent).push(object);
+    const name = object.userData.name ?? object.name;
+    if (/^FoodModel_\d+_/.test(name)) obsoleteFood.push(object);
+    if (/^Screen_i(?:Phone|Pad)_\d+$/.test(name)) screens.push(object);
+    if (name === 'Single reference brass bowl') bowl = object;
+  });
+  obsoleteFood.forEach((object) => object.removeFromParent());
+  if (!bowl) throw new Error('Missing brass bowl in the installation');
+
+  const bowlBounds = new THREE.Box3().setFromObject(bowl);
+  const bowlCenter = bowlBounds.getCenter(new THREE.Vector3());
+  bowlCenter.y = bowlBounds.max.y;
+  const subject = bowlCenter.clone().add(new THREE.Vector3(0, .03, 0));
+  const feedScene = new THREE.Scene();
+  feedScene.background = new THREE.Color('#f7f7f4');
+  scene.children.filter((child) => child.isLight).forEach((light) => feedScene.add(light.clone()));
+  const feedModel = installation.clone();
+  feedScene.add(feedModel);
+  const darkScreen = new THREE.MeshBasicMaterial({ color: 0x303234 });
+  const clonedScreens = new Map();
+  const fixtures = [];
+  feedModel.traverse((object) => {
+    if (/^(26cm weighted base|Black telescopic stand|Stand clamp)/.test(object.userData.name ?? '')) fixtures.push(object);
+    if (!/^Screen_i(?:Phone|Pad)_\d+$/.test(object.name)) return;
+    object.material = darkScreen;
+    clonedScreens.set(object.name, object);
   });
 
-  for (const [station, objects] of stations) {
-    const screen = station.children.find((object) =>
-      object.isMesh && /^Screen_i(?:Phone|Pad)_\d+$/.test(object.name));
-    if (!screen) continue;
+  const foodDirectory = 'assets/hunger-media/food-v7/';
+  const foods = new Map();
+  for (const screen of screens) {
+    const isPhone = screen.name.includes('iPhone');
+    const alternate = Number(screen.name.slice(-2)) % 2;
+    const kind = (isPhone ? ['hanbao', 'gaodian'] : ['rice', 'food'])[alternate];
+    if (!foods.has(kind)) {
+      const model = kind === 'rice'
+        ? Promise.all(['aa','ab'].map(async (part) => {
+            const response = await fetch(`${foodDirectory}rice.glb.part-${part}`);
+            if (!response.ok) throw new Error(`Rice geometry unavailable: ${response.status}`);
+            return response.blob();
+          })).then(async (parts) => loader.parseAsync(await new Blob(parts).arrayBuffer(), foodDirectory))
+        : loader.loadAsync(`${foodDirectory}${kind}.glb`);
+      foods.set(kind, model);
+    }
+
     screen.geometry.computeBoundingBox();
     const screenSize = screen.geometry.boundingBox.getSize(new THREE.Vector3());
     const aspect = screenSize.x / screenSize.y;
-    const target = new THREE.WebGLRenderTarget(Math.round(360 * aspect), 360);
-    target.texture.colorSpace = THREE.SRGBColorSpace;
+    const target = new THREE.WebGLRenderTarget(Math.round(448 * aspect), 448);
     target.texture.repeat.y = -1;
     target.texture.offset.y = 1;
-    const foodScene = new THREE.Scene();
-    foodScene.background = new THREE.Color('#191919');
-    foodScene.add(new THREE.HemisphereLight(0xffffff, 0x9b8f7f, 2));
-    const light = new THREE.DirectionalLight(0xffffff, 2.1);
-    light.position.set(-2, 3, 4);
-    foodScene.add(light);
+
+    const cameraFeed = new THREE.PerspectiveCamera(isPhone ? 73 : 55, aspect, .025, 12);
+    const position = screen.getWorldPosition(new THREE.Vector3());
+    const radial = position.clone().sub(bowlCenter).setY(0).normalize();
+    cameraFeed.position.copy(position).addScaledVector(radial, .20);
+    cameraFeed.position.y += .08;
+    cameraFeed.lookAt(subject);
 
     const pivot = new THREE.Group();
-    foodScene.add(pivot);
-    objects.forEach((object) => pivot.add(object));
-    const bounds = new THREE.Box3().setFromObject(pivot);
-    const sphere = bounds.getBoundingSphere(new THREE.Sphere());
-    objects.forEach((object) => object.position.sub(sphere.center));
-    const foodCamera = new THREE.PerspectiveCamera(34, aspect, .001, 10);
-    const verticalHalf = THREE.MathUtils.degToRad(foodCamera.fov / 2);
-    const horizontalHalf = Math.atan(Math.tan(verticalHalf) * aspect);
-    const distance = sphere.radius * 1.16 / Math.sin(Math.min(verticalHalf, horizontalHalf));
-    foodCamera.position.set(.13, .22, 1).normalize().multiplyScalar(distance);
-    foodCamera.lookAt(0, 0, 0);
-
+    pivot.position.copy(bowlCenter);
+    pivot.position.y -= .012;
+    pivot.visible = false;
+    feedScene.add(pivot);
     screen.material = new THREE.MeshBasicMaterial({
       map: target.texture, side: THREE.FrontSide, toneMapped: false,
     });
-    foodPivots.set(screen, { pivot, target, foodScene, foodCamera, dirty: true });
+    const station = clonedScreens.get(screen.name).parent;
+    const stationPosition = station.getWorldPosition(new THREE.Vector3()).setY(0);
+    const hiddenInFeed = fixtures.filter((fixture) =>
+      fixture.getWorldPosition(new THREE.Vector3()).setY(0).distanceTo(stationPosition) < .04);
+    const feed = {
+      pivot, target, feedScene, cameraFeed, hiddenInFeed: [station, ...hiddenInFeed],
+      dirty: true, hasFood: false,
+    };
+    foodPivots.set(screen, feed);
+    foods.get(kind).then(({ scene: food }) => {
+      pivot.add(food.clone());
+      feed.hasFood = true;
+      feed.dirty = true;
+    }).catch((error) => console.error(`Hunger food model ${kind} did not load`, error));
   }
 }
 
 function renderFoodScreens() {
-  for (const food of foodPivots.values()) {
-    if (!food.dirty) continue;
-    renderer.setRenderTarget(food.target);
-    renderer.render(food.foodScene, food.foodCamera);
-    food.dirty = false;
+  for (const feed of foodPivots.values()) {
+    if (!feed.dirty) continue;
+    feed.hiddenInFeed.forEach((object) => { object.visible = false; });
+    feed.pivot.visible = true;
+    renderer.setRenderTarget(feed.target);
+    renderer.render(feed.feedScene, feed.cameraFeed);
+    feed.pivot.visible = false;
+    feed.hiddenInFeed.forEach((object) => { object.visible = true; });
+    feed.dirty = false;
   }
   renderer.setRenderTarget(null);
 }
@@ -169,7 +215,7 @@ function installFoodDrag() {
     updatePointer(event);
     raycaster.setFromCamera(pointer, camera);
     const hit = raycaster.intersectObjects(scene.children, true)[0];
-    if (!hit || !foodPivots.has(hit.object)) return;
+    if (!hit || !foodPivots.get(hit.object)?.hasFood) return;
     activeFoodPivot = foodPivots.get(hit.object);
     lastPointer = { x: event.clientX, y: event.clientY };
     controls.enabled = false;
@@ -180,7 +226,7 @@ function installFoodDrag() {
     const dx = event.clientX - lastPointer.x;
     const dy = event.clientY - lastPointer.y;
     activeFoodPivot.pivot.rotation.y += dx * .012;
-    activeFoodPivot.pivot.rotation.x += dy * .012;
+    activeFoodPivot.pivot.rotation.x = THREE.MathUtils.clamp(activeFoodPivot.pivot.rotation.x + dy * .008, -.45, .45);
     activeFoodPivot.dirty = true;
     lastPointer = { x: event.clientX, y: event.clientY };
   });
@@ -260,7 +306,7 @@ function prepareViewer() {
     status.textContent = `正在载入 3D 装置… ${Math.round(loaded / total * 100)}%`;
   }).then((data) => loader.parseAsync(data, 'assets/hunger-media/'));
 
-  Promise.all([installationPromise, loader.loadAsync('assets/hunger-media/hunger-overhead-v6.glb')])
+  Promise.all([installationPromise, loader.loadAsync('assets/hunger-media/hunger-overhead-v7.glb')])
     .then(([gltf, overheadModel]) => {
     const installation = gltf.scene;
     const overhead = overheadModel.scene;
@@ -278,13 +324,12 @@ function prepareViewer() {
     installation.position.z -= center.z;
     installation.position.y -= bounds.min.y;
     scene.add(installation);
-    addFoodRotation(installation);
+    createDeviceFeeds(installation, loader);
     installFoodDrag();
     const size = bounds.getSize(new THREE.Vector3());
     const span = Math.max(size.x, size.y, size.z, 1);
     const viewCenterY = size.y * .48;
-    // Start from the presentation side so the angled overhead screens show
-    // their active faces, as in the installation reference.
+    // Start at the forward screen. Orbit to see the other two faces.
     camera.position.set(span * .62, viewCenterY + span * .35, span * 1.45);
     camera.near = Math.max(span / 800, .01);
     camera.far = span * 12;
