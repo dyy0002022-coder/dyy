@@ -4,23 +4,32 @@
 
   const items = [...track.querySelectorAll('.hunger-gallery__item')];
   const counter = document.querySelector('#hunger-gallery-counter');
-  const progress = document.querySelector('#hunger-gallery-progress');
+  const gallery = track.closest('.hunger-gallery');
+  const refreshImages = () => items.forEach(item => { item.querySelector('img').loading = 'eager'; });
+  const preload = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      refreshImages();
+      preload.disconnect();
+    }
+  }, { rootMargin: '700px 0px' });
+  preload.observe(gallery);
+  track.addEventListener('focusin', refreshImages);
   let pointerStart = null;
   let dragged = false;
 
   const update = () => {
-    const maxScroll = Math.max(1, track.scrollWidth - track.clientWidth);
-    const ratio = Math.max(0, Math.min(1, track.scrollLeft / maxScroll));
-    if (progress) progress.style.transform = `scaleX(${ratio})`;
-
-    const center = track.scrollLeft + track.clientWidth / 2;
+    const center = track.getBoundingClientRect().left + track.clientWidth / 2;
     const closest = items.reduce((best, item, index) => {
-      const itemCenter = item.offsetLeft + item.clientWidth / 2;
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.left + rect.width / 2;
       return Math.abs(itemCenter - center) < best.distance
         ? { index, distance: Math.abs(itemCenter - center) }
         : best;
     }, { index: 0, distance: Infinity });
-    if (counter) counter.textContent = `${String(closest.index + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const index = track.scrollLeft < 2 ? 0 : track.scrollLeft >= maxScroll - 2 ? items.length - 1 : closest.index;
+    if (counter) counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
+    return index;
   };
 
   track.addEventListener('scroll', update, { passive: true });
@@ -29,7 +38,12 @@
   document.querySelectorAll('[data-gallery-step]').forEach((button) => {
     button.addEventListener('click', () => {
       const direction = Number(button.dataset.galleryStep) || 1;
-      track.scrollBy({ left: direction * track.clientWidth * 0.78, behavior: 'smooth' });
+      refreshImages();
+      const next = items[Math.max(0, Math.min(items.length - 1, update() + direction))];
+      const frame = next.getBoundingClientRect();
+      const left = track.scrollLeft + frame.left + frame.width / 2 -
+        track.getBoundingClientRect().left - track.clientWidth / 2;
+      track.scrollTo({ left, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     });
   });
 

@@ -3,12 +3,16 @@ import { GLTFLoader } from './vendor/three/GLTFLoader.js';
 import { OrbitControls } from './vendor/three/OrbitControls.js';
 
 const world = document.querySelector('#hunger-world');
-const introVideo = document.querySelector('#hunger-intro-video');
 const status = document.querySelector('#hunger-status');
 const canvas = document.querySelector('#hunger-canvas');
-const musicToggle = document.querySelector('#hunger-music-toggle');
-const enterButton = document.querySelector('#hunger-enter');
-const introCaption = document.querySelector('#hunger-intro-caption');
+const detailDialog = document.getElementById('hunger-food-dialog');
+const detailStage = document.getElementById('hunger-food-stage');
+const foodPicker = document.getElementById('hunger-food-choice');
+const openFoodButton = document.getElementById('hunger-food-open');
+const foodLabels = { rice: '米饭拼盘', food: '红碗拼盘', hanbao: '汉堡拼盘', gaodian: '甜点拼盘' };
+const availableFoods = new Map();
+let detailViewer = null;
+let previousFocus = null;
 let renderer, scene, camera, controls;
 let viewerVisible = false;
 const raycaster = new THREE.Raycaster();
@@ -17,7 +21,7 @@ const foodPivots = new Map();
 let activeFoodPivot = null;
 let lastPointer = null;
 
-async function loadSegmentedAsset(prefix, count, onProgress, mediaType = null) {
+async function loadSegmentedAsset(prefix, count, onProgress) {
   const chunks = new Array(count);
   let nextIndex = 0;
   let completed = 0;
@@ -34,7 +38,6 @@ async function loadSegmentedAsset(prefix, count, onProgress, mediaType = null) {
     }
   };
   await Promise.all(Array.from({ length: Math.min(4, count) }, worker));
-  if (mediaType) return new Blob(chunks, { type: mediaType });
   const merged = new Uint8Array(chunks.reduce((total, chunk) => total + chunk.byteLength, 0));
   let offset = 0;
   for (const chunk of chunks) {
@@ -44,38 +47,33 @@ async function loadSegmentedAsset(prefix, count, onProgress, mediaType = null) {
   return merged.buffer;
 }
 
-async function loadIntroVideo() {
-  const videoData = await loadSegmentedAsset('hunger-intro', 25, null, 'video/mp4');
-  introVideo.src = URL.createObjectURL(videoData);
-  introVideo.load();
-  await new Promise((resolve, reject) => {
-    introVideo.addEventListener('loadeddata', resolve, { once: true });
-    introVideo.addEventListener('error', reject, { once: true });
-  });
-  try {
-    await introVideo.play();
-  } catch (error) {
-    console.warn('Opening video is ready; waiting for a gesture to play.', error);
+function fitFoodIntoBowl(food, bowl, bowlBounds) {
+  const model = food.clone();
+  const bounds = new THREE.Box3().setFromObject(model);
+  const size = bounds.getSize(new THREE.Vector3());
+  const center = bounds.getCenter(new THREE.Vector3());
+  const bowlSize = bowlBounds.getSize(new THREE.Vector3());
+  const width = Math.min(bowlSize.x, bowlSize.z);
+  const scale = width * .72 / Math.max(size.x, size.z);
+  const origin = bowlBounds.getCenter(new THREE.Vector3());
+  const probe = new THREE.Raycaster();
+  const down = new THREE.Vector3(0, -1, 0);
+  let seatY = bowlBounds.min.y + bowlSize.y * .18;
+  // Sample the bowl's inner surface where the food base meets it.
+  for (let index = 0; index < 8; index++) {
+    const angle = index * Math.PI / 4;
+    probe.set(new THREE.Vector3(
+      origin.x + width * .30 * Math.cos(angle),
+      bowlBounds.max.y + .01,
+      origin.z + width * .30 * Math.sin(angle),
+    ), down);
+    const [hit] = probe.intersectObject(bowl, true);
+    if (hit && hit.point.y < bowlBounds.max.y - bowlSize.y * .15) seatY = Math.max(seatY, hit.point.y);
   }
+  model.scale.multiplyScalar(scale);
+  model.position.set(-center.x * scale, -bounds.min.y * scale, -center.z * scale);
+  return { model, seatY };
 }
-
-function enterInstallation() {
-  world.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-enterButton.addEventListener('click', enterInstallation);
-introVideo.addEventListener('ended', () => {
-  introCaption.textContent = '影像结束 · 正在进入 Hunger 装置';
-  if (introVideo.getBoundingClientRect().bottom > 0) enterInstallation();
-});
-musicToggle.addEventListener('click', async () => {
-  introVideo.muted = !introVideo.muted;
-  musicToggle.setAttribute('aria-pressed', String(!introVideo.muted));
-  musicToggle.textContent = introVideo.muted ? '开启背景音乐 · SOUND ON' : '关闭背景音乐 · SOUND OFF';
-  if (!introVideo.muted) {
-    try { await introVideo.play(); } catch (error) { console.warn('Could not start audio playback.', error); }
-  }
-});
 
 function attachScreenVideo(overhead) {
   const video = document.querySelector('#hunger-screen-video');
@@ -154,7 +152,7 @@ function createDeviceFeeds(installation, loader) {
     screen.geometry.computeBoundingBox();
     const screenSize = screen.geometry.boundingBox.getSize(new THREE.Vector3());
     const aspect = screenSize.x / screenSize.y;
-    const target = new THREE.WebGLRenderTarget(Math.round(448 * aspect), 448);
+    const target = new THREE.WebGLRenderTarget(Math.round(640 * aspect), 640);
     target.texture.repeat.y = -1;
     target.texture.offset.y = 1;
 
@@ -167,7 +165,6 @@ function createDeviceFeeds(installation, loader) {
 
     const pivot = new THREE.Group();
     pivot.position.copy(bowlCenter);
-    pivot.position.y -= .012;
     pivot.visible = false;
     feedScene.add(pivot);
     screen.material = new THREE.MeshBasicMaterial({
@@ -178,14 +175,25 @@ function createDeviceFeeds(installation, loader) {
     const hiddenInFeed = fixtures.filter((fixture) =>
       fixture.getWorldPosition(new THREE.Vector3()).setY(0).distanceTo(stationPosition) < .04);
     const feed = {
-      pivot, target, feedScene, cameraFeed, hiddenInFeed: [station, ...hiddenInFeed],
+      kind, pivot, target, feedScene, cameraFeed, hiddenInFeed: [station, ...hiddenInFeed],
       dirty: true, hasFood: false,
     };
     foodPivots.set(screen, feed);
     foods.get(kind).then(({ scene: food }) => {
-      pivot.add(food.clone());
+      const { model, seatY } = fitFoodIntoBowl(food, bowl, bowlBounds);
+      pivot.position.y = seatY;
+      pivot.add(model);
       feed.hasFood = true;
       feed.dirty = true;
+      if (!availableFoods.has(kind)) {
+        availableFoods.set(kind, food);
+        foodPicker.querySelector('option[value="' + kind + '"]').disabled = false;
+        if (openFoodButton.disabled) {
+          foodPicker.value = kind;
+          foodPicker.disabled = false;
+          openFoodButton.disabled = false;
+        }
+      }
     }).catch((error) => console.error(`Hunger food model ${kind} did not load`, error));
   }
 }
@@ -204,56 +212,148 @@ function renderFoodScreens() {
   renderer.setRenderTarget(null);
 }
 
-function installFoodDrag() {
-  const updatePointer = (event) => {
-    const rect = canvas.getBoundingClientRect();
-    pointer.set(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
-  };
+function getScreenFood(event) {
+  const rect = canvas.getBoundingClientRect();
+  pointer.set(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
+  raycaster.setFromCamera(pointer, camera);
+  const hit = raycaster.intersectObjects(scene.children, true)[0];
+  const feed = hit && foodPivots.get(hit.object);
+  return feed?.hasFood ? feed : null;
+}
 
-  canvas.addEventListener('pointerdown', (event) => {
-    if (event.button !== 0) return;
-    updatePointer(event);
-    raycaster.setFromCamera(pointer, camera);
-    const hit = raycaster.intersectObjects(scene.children, true)[0];
-    if (!hit || !foodPivots.get(hit.object)?.hasFood) return;
-    activeFoodPivot = foodPivots.get(hit.object);
+function installFoodDrag() {
+  let touchTap = null;
+  let dragMoved = false;
+
+  canvas.addEventListener('pointerdown', event => {
+    if (detailViewer || event.button !== 0 || !event.isPrimary) return;
+    activeFoodPivot = getScreenFood(event);
+    if (!activeFoodPivot) return;
     lastPointer = { x: event.clientX, y: event.clientY };
+    dragMoved = false;
     controls.enabled = false;
     canvas.setPointerCapture(event.pointerId);
   }, { capture: true });
-  canvas.addEventListener('pointermove', (event) => {
-    if (!activeFoodPivot || !lastPointer) return;
+
+  canvas.addEventListener('pointermove', event => {
+    if (!activeFoodPivot || !lastPointer || !event.isPrimary) return;
     const dx = event.clientX - lastPointer.x;
     const dy = event.clientY - lastPointer.y;
+    if (!dragMoved && Math.hypot(dx, dy) < 5) return;
+    dragMoved = true;
     activeFoodPivot.pivot.rotation.y += dx * .012;
-    activeFoodPivot.pivot.rotation.x = THREE.MathUtils.clamp(activeFoodPivot.pivot.rotation.x + dy * .008, -.45, .45);
     activeFoodPivot.dirty = true;
     lastPointer = { x: event.clientX, y: event.clientY };
   });
-  const finish = () => {
+
+  const finish = event => {
     if (!activeFoodPivot) return;
+    const feed = activeFoodPivot;
     activeFoodPivot = null;
     lastPointer = null;
     controls.enabled = true;
+    if (event.type !== 'pointerup' || event.pointerType !== 'touch' || dragMoved) {
+      touchTap = null;
+      return;
+    }
+    const now = performance.now();
+    if (touchTap && touchTap.feed === feed && now - touchTap.time < 350 &&
+        Math.hypot(event.clientX - touchTap.x, event.clientY - touchTap.y) < 28) {
+      touchTap = null;
+      openFoodDetail(feed.kind, feed.pivot.rotation.y);
+      return;
+    }
+    touchTap = { feed, time: now, x: event.clientX, y: event.clientY };
   };
   canvas.addEventListener('pointerup', finish);
   canvas.addEventListener('pointercancel', finish);
   canvas.addEventListener('lostpointercapture', finish);
+  canvas.addEventListener('dblclick', event => {
+    if (detailViewer) return;
+    const feed = getScreenFood(event);
+    if (feed) openFoodDetail(feed.kind, feed.pivot.rotation.y);
+  });
 }
 
+function openFoodDetail(kind, angle = 0) {
+  const food = availableFoods.get(kind);
+  if (!food || detailViewer) return;
+  const model = food.clone();
+  const bounds = new THREE.Box3().setFromObject(model);
+  const center = bounds.getCenter(new THREE.Vector3());
+  const radius = bounds.getBoundingSphere(new THREE.Sphere()).radius;
+  model.position.sub(center);
+  const pivot = new THREE.Group();
+  pivot.rotation.y = angle;
+  pivot.add(model);
+  const preview = new THREE.Scene();
+  preview.background = new THREE.Color('#f7f7f4');
+  scene.children.filter(child => child.isLight).forEach(light => preview.add(light.clone()));
+  preview.add(pivot);
+
+  const previewCamera = new THREE.PerspectiveCamera(38, 1, .001, 20);
+  const orbit = new OrbitControls(previewCamera, canvas);
+  orbit.enableDamping = true;
+  orbit.enablePan = false;
+  orbit.minDistance = radius * 1.4;
+  orbit.maxDistance = radius * 11;
+  orbit.minPolarAngle = .03;
+  orbit.maxPolarAngle = Math.PI - .03;
+  previewCamera.position.set(1, .63, 1.2).setLength(radius * 4.2);
+  orbit.update();
+
+  previousFocus = document.activeElement;
+  document.getElementById('hunger-food-title').textContent = foodLabels[kind];
+  controls.enabled = false;
+  detailViewer = { scene: preview, camera: previewCamera, controls: orbit, radius };
+  detailStage.append(canvas);
+  canvas.setAttribute('aria-label', '拖动 360° 查看食物模型，滚动或捏合缩放');
+  detailDialog.showModal();
+  resize();
+}
+
+openFoodButton.addEventListener('click', () => openFoodDetail(foodPicker.value));
+detailDialog.addEventListener('close', () => {
+  if (!detailViewer) return;
+  detailViewer.controls.dispose();
+  detailViewer = null;
+  world.prepend(canvas);
+  canvas.style.touchAction = 'pan-y';
+  canvas.setAttribute('aria-label', '拖动旋转 Hunger 装置');
+  controls.enabled = true;
+  resize();
+  previousFocus?.focus({ preventScroll: true });
+});
+
 function resize() {
-  const width = world.clientWidth;
-  const height = world.clientHeight;
-  if (!width || !height || !renderer) return;
-  renderer.setSize(width, height, false);
+  if (!renderer) return;
+  const viewport = detailViewer ? detailStage : world;
+  const width = viewport.clientWidth;
+  const height = viewport.clientHeight;
+  if (!width || !height) return;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
+  renderer.setSize(width, height, false);
+  const currentCamera = detailViewer?.camera ?? camera;
+  currentCamera.aspect = width / height;
+  currentCamera.updateProjectionMatrix();
+  if (detailViewer) {
+    const field = Math.atan(Math.tan(THREE.MathUtils.degToRad(currentCamera.fov / 2)) * Math.min(1, currentCamera.aspect));
+    const distance = detailViewer.radius / Math.sin(field) * 1.14;
+    const offset = currentCamera.position.clone().sub(detailViewer.controls.target);
+    if (detailViewer.fitAspect === undefined) currentCamera.position.copy(offset.setLength(distance));
+    detailViewer.fitAspect = currentCamera.aspect;
+  }
 }
 
 function animate() {
   requestAnimationFrame(animate);
-  if (!viewerVisible || document.hidden) return;
+  if (document.hidden) return;
+  if (detailViewer) {
+    detailViewer.controls.update();
+    renderer.render(detailViewer.scene, detailViewer.camera);
+    return;
+  }
+  if (!viewerVisible) return;
   controls.update();
   renderFoodScreens();
   renderer.render(scene, camera);
@@ -297,7 +397,9 @@ function prepareViewer() {
   controls.maxDistance = 80;
   controls.maxPolarAngle = Math.PI * .49;
   controls.target.set(0, 0, 0);
-  new ResizeObserver(resize).observe(world);
+  const resizeObserver = new ResizeObserver(resize);
+  resizeObserver.observe(world);
+  resizeObserver.observe(detailStage);
   window.addEventListener('resize', resize, { passive: true });
   resize();
 
@@ -362,9 +464,5 @@ new IntersectionObserver((entries, observer) => {
   requestAnimationFrame(() => {
     try { prepareViewer(); } catch (error) { showModelError(error); }
   });
-}, { rootMargin: '220px 0px' }).observe(world);
+}, { threshold: .05 }).observe(world);
 
-loadIntroVideo().catch((error) => {
-  introCaption.textContent = '开场影像暂时无法载入，可继续向下进入装置';
-  console.error('Hunger opening video failed to load', error);
-});
