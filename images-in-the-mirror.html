@@ -83,6 +83,16 @@ body.scroll-ready .source-pages figure.is-visible img{opacity:1;transform:none;c
 }
 .mirror-exhibition-view { margin: 0; scroll-margin-top: var(--nav-h, 0px); }
 .mirror-exhibition-view img { display: block; width: 100%; max-width: 100%; height: auto; }
+
+.mirror-strip { padding: clamp(24px, 3vw, 64px) 0; }
+.mirror-strip-viewport { overflow: hidden; cursor: grab; touch-action: pan-y; }
+.mirror-strip-viewport.is-dragging { cursor: grabbing; }
+.mirror-strip-track { display: flex; }
+.mirror-strip-tile { position: relative; flex: 0 0 max(100%, 1000px); aspect-ratio: 2400 / 285; overflow: hidden; }
+.source-pages .mirror-strip-tile img { position: absolute; top: -213.33%; width: 100%; height: auto; pointer-events: none; }
+.mirror-strip-controls { display: flex; justify-content: flex-end; gap: 6px; padding: 8px clamp(12px, 3vw, 32px) 0; }
+.mirror-strip-controls[hidden] { display: none; }
+.mirror-strip-controls button { border: 1px solid #d6d4ce; border-radius: 4px; padding: 4px 9px; background: #fff; color: #191815; cursor: pointer; }
 </style></head><body id="top"><a class="skip" href="#main">跳至内容 / Skip to content</a><header class="nav"><a class="wordmark" href="index.html" aria-label="Yingying Dong home">YINGYING DONG<span>董盈盈</span></a><nav aria-label="Main navigation"><a href="index.html#work"><span class="" data-zh="作品" data-en="Works">作品</span></a><a href="about.html"><span class="" data-zh="关于" data-en="About">关于</span></a><a href="#contact"><span class="" data-zh="联系" data-en="Contact">联系</span></a><button class="lang" aria-label="Switch language">EN</button></nav></header><main id="main" class="project">
 <section class="mirror-living-opening" aria-label="Images in the Mirror · 项目开场">
   <div class="mirror-film-frame" id="mirror-film-frame">
@@ -102,7 +112,18 @@ body.scroll-ready .source-pages figure.is-visible img{opacity:1;transform:none;c
 <figure class="is-visible"><img src="assets/mirror-pages-hi/page-01.png?v=20261117" width="2400" height="1500" alt="Images in the Mirror 原设计标题页" decoding="async"></figure>
 <figure><img src="assets/mirror-pages-hi/overview-psd.webp" width="4800" height="3000" alt="Images in the Mirror 项目概述与桌面装置" loading="lazy" decoding="async"></figure>
 <figure class="device-artboard" id="exhibition-page"><img src="assets/mirror-pages-hi/page-03.png?v=20261117" alt="Images in the Mirror 项目页面 3：展览墙及平板、手机屏幕" loading="lazy" decoding="async"><button class="device-video-trigger tablet-screen" type="button" data-src="assets/mirror-media/tablet.mp4?v=20261117" data-label="平板屏幕动画" aria-label="放大观看平板屏幕动画"><video data-source="assets/mirror-media/tablet.mp4?v=20261117" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video></button><button class="device-video-trigger phone-screen" type="button" data-src="assets/mirror-media/phone.mp4?v=20261117" data-label="手机竖屏影像" aria-label="放大观看手机竖屏视频"><video data-source="assets/mirror-media/phone.mp4?v=20261117" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"></video></button><button class="project-film-page-button" id="open-project-film" type="button">可选观看项目影片 ↗</button></figure>
-<figure><img src="assets/mirror-pages-hi/page-04.png?v=20261117" alt="Images in the Mirror 项目页面 4" loading="lazy" decoding="async"></figure><figure><img src="assets/mirror-pages-hi/page-05.png?v=20261117" alt="Images in the Mirror 项目页面 5" loading="lazy" decoding="async"></figure><figure><img src="assets/mirror-pages-hi/page-06.png?v=20261117" alt="Images in the Mirror 项目页面 6" loading="lazy" decoding="async"></figure><figure><img src="assets/mirror-pages-hi/page-07.png?v=20261117" alt="Images in the Mirror 项目页面 7" loading="lazy" decoding="async"></figure>
+<figure><img src="assets/mirror-pages-hi/page-04.png?v=20261117" alt="Images in the Mirror 项目页面 4" loading="lazy" decoding="async"></figure><figure><img src="assets/mirror-pages-hi/page-05.png?v=20261117" alt="Images in the Mirror 项目页面 5" loading="lazy" decoding="async"></figure><figure><img src="assets/mirror-pages-hi/page-06.png?v=20261117" alt="Images in the Mirror 项目页面 6" loading="lazy" decoding="async"></figure><div class="mirror-strip" id="mirror-stills" role="region" aria-label="城市影像 · City film stills">
+  <div class="mirror-strip-viewport">
+    <div class="mirror-strip-track">
+      <div class="mirror-strip-tile"><img src="assets/mirror-pages-hi/page-07.png?v=20261117" width="2400" height="1500" alt="五幅上海城市影像，从地图上的光迹到高楼与天际线" loading="lazy" decoding="async" draggable="false"></div>
+    </div>
+  </div>
+  <div class="mirror-strip-controls" hidden>
+    <button type="button" data-step="-1" aria-label="向左滚动">←</button>
+    <button type="button" data-play aria-pressed="false">暂停</button>
+    <button type="button" data-step="1" aria-label="向右滚动">→</button>
+  </div>
+</div>
 </section><dialog class="full-screen-video" id="project-film-dialog" aria-label="项目影片全屏播放"><div class="film-stage"><form method="dialog"><button class="film-close" aria-label="关闭全屏视频">×</button></form><video id="project-film-video" controls playsinline preload="none" poster="assets/mirror-pages-hi/page-03.png?v=20261117" aria-label="Images in the Mirror 项目影片"></video></div><p class="film-caption" id="film-caption">PROJECT FILM · 按 Esc 或点击 × 返回第 3 页</p></dialog></main><footer id="contact" hidden><div class="foot-top"><div><p class="eyebrow">GET IN TOUCH</p><h2 class="" data-zh="让新的故事发生。" data-en="Let a new story unfold.">让新的故事发生。</h2></div><a class="email" href="mailto:dyy0002022@163.com">dyy0002022@163.com ↗</a></div><div class="foot-bottom"><span>© 2026 Yingying Dong</span><span class="" data-zh="视觉 · 影像 · 跨媒介" data-en="Visual · Moving image · Cross-media">视觉 · 影像 · 跨媒介</span><a href="#top"><span class="" data-zh="回到顶部 ↑" data-en="Back to top ↑">回到顶部 ↑</span></a></div></footer><dialog id="lightbox"><button class="close" aria-label="Close image">×</button><img alt=""><p></p></dialog><script defer src="watermark.js?v=20261108-soft3"></script><script id="source-pages-scroll">
 (()=>{const pages=[...document.querySelectorAll('.source-pages figure')],filmDialog=document.getElementById('project-film-dialog'),film=document.getElementById('project-film-video'),caption=document.getElementById('film-caption'),buttons=[...document.querySelectorAll('.device-video-trigger')];if(!pages.length)return;document.body.classList.add('scroll-ready');const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;pages[0].classList.add('is-visible');if(reduced)pages.forEach(p=>p.classList.add('is-visible'));else{const pageObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');pageObserver.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px',threshold:.04});pages.forEach(p=>pageObserver.observe(p))}
 function previewFor(btn){const v=btn.querySelector('video');if(!v.src){v.src=v.dataset.source;v.load()}return v}
@@ -145,5 +166,104 @@ document.getElementById('open-project-film').addEventListener('click',()=>openFi
 buttons.forEach(btn=>btn.addEventListener('click',()=>{const preview=previewFor(btn);preview.pause();openFilm(btn.dataset.src,btn.dataset.label,preview)}));
 filmDialog.addEventListener('close',()=>{film.pause();film.removeAttribute('src');film.load();if(activePreview)activePreview.play().catch(()=>{});activePreview=null});
 filmDialog.addEventListener('click',e=>{if(e.target===filmDialog)filmDialog.close()});
+})();
+</script><script id="mirror-stills-loop">
+(() => {
+  const strip = document.querySelector('#mirror-stills');
+  const viewport = strip.querySelector('.mirror-strip-viewport');
+  const track = strip.querySelector('.mirror-strip-track');
+  const tile = track.firstElementChild;
+  const controls = strip.querySelector('.mirror-strip-controls');
+  const play = strip.querySelector('[data-play]');
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const repeat = tile.cloneNode(true);
+  repeat.setAttribute('aria-hidden', 'true');
+  repeat.querySelector('img').alt = '';
+  track.append(repeat);
+  controls.hidden = false;
+
+  let width = 0;
+  let offset = 0;
+  let drag;
+  let visible = false;
+  let paused = reducedMotion.matches;
+  let time = 0;
+  let frame = 0;
+
+  function render() {
+    if (!width) return;
+    offset = ((offset % width) + width) % width;
+    track.style.transform = 'translateX(' + (-offset) + 'px)';
+  }
+  function tick(now) {
+    frame = 0;
+    if (time) {
+      offset += Math.min(now - time, 50) * .034;
+      render();
+    }
+    time = now;
+    sync();
+  }
+  function sync() {
+    const animate = visible && !paused && !drag && !document.hidden;
+    if (animate && !frame) frame = requestAnimationFrame(tick);
+    if (!animate) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      time = 0;
+    }
+  }
+  function updatePause() {
+    play.textContent = paused ? '播放' : '暂停';
+    play.setAttribute('aria-pressed', String(paused));
+    sync();
+  }
+  new ResizeObserver(() => {
+    const nextWidth = tile.getBoundingClientRect().width;
+    if (nextWidth && width) offset *= nextWidth / width;
+    width = nextWidth;
+    render();
+  }).observe(tile);
+  new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    sync();
+  }).observe(viewport);
+  document.addEventListener('visibilitychange', sync);
+  reducedMotion.addEventListener('change', ({ matches }) => {
+    paused = matches;
+    updatePause();
+  });
+  play.addEventListener('click', () => {
+    paused = !paused;
+    updatePause();
+  });
+  controls.querySelectorAll('[data-step]').forEach(button => {
+    button.addEventListener('click', () => {
+      offset += Math.min(width / 5, viewport.clientWidth * .8) * Number(button.dataset.step);
+      render();
+    });
+  });
+  viewport.addEventListener('pointerdown', event => {
+    if (!event.isPrimary || event.button !== 0) return;
+    drag = { id: event.pointerId, x: event.clientX, offset };
+    viewport.setPointerCapture(event.pointerId);
+    viewport.classList.add('is-dragging');
+    sync();
+  });
+  viewport.addEventListener('pointermove', event => {
+    if (drag?.id !== event.pointerId) return;
+    offset = drag.offset + drag.x - event.clientX;
+    render();
+  });
+  function stopDrag(event) {
+    if (drag?.id !== event.pointerId) return;
+    drag = undefined;
+    viewport.classList.remove('is-dragging');
+    sync();
+  }
+  viewport.addEventListener('pointerup', stopDrag);
+  viewport.addEventListener('pointercancel', stopDrag);
+  viewport.addEventListener('lostpointercapture', stopDrag);
+  updatePause();
 })();
 </script></body></html>
